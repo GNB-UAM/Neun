@@ -68,6 +68,50 @@ char * toCamelCase(char *str) {
 }
 
 
+// Verifica si un nombre está en el array de variables
+int is_in_variables(const char* name) {
+    for (int i = 0; i < n_variables; i++) {
+        if (strcmp(name, variables[i]) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+// Reemplaza params[X] por vars[X] si X está en el array `variables`
+void fix_vars_as_params(const char* input, char* output, size_t output_size) {
+    const char* p = input;
+    char* out = output;
+    size_t remaining = output_size - 1;  // reserva para el null terminator
+
+    while (*p && remaining > 0) {
+        if (strncmp(p, "params[", 7) == 0) {
+            const char* start = p + 7;
+            const char* end = strchr(start, ']');
+
+            if (end && (end - start) < 64) {
+                char varname[64];
+                strncpy(varname, start, end - start);
+                varname[end - start] = '\0';
+
+                if (is_in_variables(varname)) {
+                    int written = snprintf(out, remaining, "vars[%s]", varname);
+                    out += written;
+                    remaining -= written;
+                    p = end + 1;
+                    continue;
+                }
+            }
+        }
+
+        *out++ = *p++;
+        remaining--;
+    }
+
+    *out = '\0';  // null-terminate
+}
+
+
 void write_headers(char * modelname) {
 
     char aux_modelname[100];
@@ -144,7 +188,9 @@ void write_eval(){
     printf("    void eval(const Precission * const vars, Precission * const params, Precission * const incs) const\n{\n");
     
     for (int i = 0; i < eq_count; i++) {
-        printf("        params[%s] = %s\n", strtolower(equations[i].variable), strtolower(equations[i].equation));
+            char str_aux[256];
+        fix_vars_as_params(equations[i].equation, str_aux, 256);
+        printf("        params[%s] = %s\n", strtolower(equations[i].variable), strtolower(str_aux));
     }
 
     for (int i = 0; i < incs_eq_count; i++) {
