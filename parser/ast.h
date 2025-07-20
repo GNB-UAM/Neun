@@ -2,6 +2,7 @@
 #define AST_H
 
 #define MAX_EQUATIONS 100
+#define DEBUG 0
 
 /* Struct for equations */
 typedef struct {
@@ -12,7 +13,10 @@ typedef struct {
 extern int eq_count;
 extern Equation equations[MAX_EQUATIONS];
 
+extern int incs_eq_count;
+extern Equation incs_equations[MAX_EQUATIONS];
 
+extern int is_timevariable;
 
 #define MAX_VARIABLES 100  // Tamaño máximo de los arrays
 

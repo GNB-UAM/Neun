@@ -4,8 +4,12 @@
 #include <ctype.h>
 #include "ast.h"
 
+int is_timevariable = 0;
 int eq_count = 0;
+int incs_eq_count = 0;
+
 Equation equations[MAX_EQUATIONS];
+Equation incs_equations[MAX_EQUATIONS];
 char modelname[] = "GenericName";
 
 
@@ -137,16 +141,21 @@ void write_constructor(){
 }
 void write_eval(){
     
-    printf("    void eval(const Precission * const vars, Precission * const params, Precission * const incs) const\n{");
+    printf("    void eval(const Precission * const vars, Precission * const params, Precission * const incs) const\n{\n");
 	
     for (int i = 0; i < eq_count; i++) {
-        printf("        incs[%s] = %s\n", equations[i].variable, equations[i].equation);
+        printf("        params[%s] = %s\n", strtolower(equations[i].variable), strtolower(equations[i].equation));
+    }
+
+    for (int i = 0; i < incs_eq_count; i++) {
+        printf("        incs[%s] = %s\n", strtolower(incs_equations[i].variable), strtolower(incs_equations[i].equation));
+    }
     
     // incs[m] = alpha_m(vars[v]) * (1 - vars[m]) - beta_m(vars[v]) * vars[m];
 	// 	incs[h] = alpha_h(vars[v]) * (1 - vars[h]) - beta_h(vars[v]) * vars[h];
 	// 	incs[n] = alpha_n(vars[v]) * (1 - vars[n]) - beta_n(vars[v]) * vars[n];
 	// 	incs[v] = (SYNAPTIC_INPUT - params[gl] * (vars[v] - params[vl]) - params[gna] * pow(vars[m], 3) * vars[h] * (vars[v] - params[vna]) - params[gk] * pow(vars[n], 4) * (vars[v] - params[vk])) / params[cm];
-	}
+	
     printf("}\n");
 
 }
