@@ -142,20 +142,23 @@ void write_constructor(){
 void write_eval(){
     
     printf("    void eval(const Precission * const vars, Precission * const params, Precission * const incs) const\n{\n");
-	
+    
     for (int i = 0; i < eq_count; i++) {
         printf("        params[%s] = %s\n", strtolower(equations[i].variable), strtolower(equations[i].equation));
     }
 
     for (int i = 0; i < incs_eq_count; i++) {
-        printf("        incs[%s] = %s\n", strtolower(incs_equations[i].variable), strtolower(incs_equations[i].equation));
+        //Include synaptic input for V increment
+        if (strcmp(strtolower(incs_equations[i].variable), "v") == 0)
+        {
+            char str_aux[256];
+            snprintf(str_aux, sizeof(incs_equations[i].equation), "SYNAPTIC_INPUT + %s", strtolower(incs_equations[i].equation));
+            snprintf(incs_equations[i].equation, sizeof(incs_equations[i].equation), "%s", str_aux);
+        }
+
+        printf("        incs[%s] = %s\n", strtolower(incs_equations[i].variable), incs_equations[i].equation);
     }
     
-    // incs[m] = alpha_m(vars[v]) * (1 - vars[m]) - beta_m(vars[v]) * vars[m];
-	// 	incs[h] = alpha_h(vars[v]) * (1 - vars[h]) - beta_h(vars[v]) * vars[h];
-	// 	incs[n] = alpha_n(vars[v]) * (1 - vars[n]) - beta_n(vars[v]) * vars[n];
-	// 	incs[v] = (SYNAPTIC_INPUT - params[gl] * (vars[v] - params[vl]) - params[gna] * pow(vars[m], 3) * vars[h] * (vars[v] - params[vna]) - params[gk] * pow(vars[n], 4) * (vars[v] - params[vk])) / params[cm];
-	
     printf("}\n");
 
 }
