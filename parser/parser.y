@@ -12,7 +12,7 @@ int yylex();
 
 /* Define tokens */
 %token <str> VARIABLE        
-%token <str> TIME_VARIABLE   
+%token <str> TIME_VARIABLE
 %token <num> NUMBER          
 %token BEGIN_EQUATION END_EQUATION SUM MINUS MULT DIV EXP EQUALSIGN
 %token L_BRK R_BRK L_CB R_CB SUBINDEX FRAQ INF
@@ -28,6 +28,7 @@ int yylex();
 %type <str> math_expression
 %type <str> time_variable
 %type <str> variable
+%type <str> function
 
 /* Operators and precedence */
 %left SUM MINUS
@@ -97,6 +98,10 @@ math_expression:
         asprintf(&$$, "pow(%s, %s)", $1, $3);
         if (DEBUG) printf("Exponential: %s\n", $$);
     }
+    | FRAQ L_CB math_expression R_CB L_CB math_expression R_CB {
+        asprintf(&$$, "%s / %s", $3, $6);
+        if (DEBUG) printf("FRAQ: %s\n", $$);
+    }
     | variable{
         $$ = strdup($1); 
         if (DEBUG) printf("variable: %s\n", $$);
@@ -108,37 +113,45 @@ math_expression:
     ;
 
 variable:
-    time_variable {
+    function{
+        $$ = strdup($1); 
+        if (DEBUG) printf("Function: %s\n", $$);
+    }
+    | time_variable {
         $$ = strdup($1); 
         is_timevariable = 1;
         if (DEBUG) printf("Time Variable: %s\n", $$);
     }
     | VARIABLE SUBINDEX L_CB INF R_CB {  
-        asprintf(&$$, "params[%s_inf]", $1); 
+        asprintf(&$$, "%s_inf", $1); 
         if (DEBUG) printf("Subindex with infinity: %s\n", $$);
         if (n_parameters < MAX_VARIABLES) {
             parameters[n_parameters++] = strdup($$);  // Agrega al array
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
         }
+        // asprintf(&$$, "params[%s_inf]", $1); 
+        // if (DEBUG) printf("Subindex with infinity: %s\n", $$);
     }
     | VARIABLE SUBINDEX L_CB VARIABLE R_CB {  
-        asprintf(&$$, "params[%s_%s]", $1, $4); 
-        if (DEBUG) printf("Subindex: %s\n", $$);
+        asprintf(&$$, "%s_%s", $1, $4); 
         if (n_parameters < MAX_VARIABLES) {
             parameters[n_parameters++] = strdup($$);  // Agrega al array
+        if (DEBUG) printf("Subindex: %s\n", $$);
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
         }
+        // asprintf(&$$, "params[%s_%s]", $1, $4); 
+        // if (DEBUG) printf("Subindex: %s\n", $$);
     }
     | VARIABLE  {
         // $$ = strdup($1);
         
-        asprintf(&$$, "params[%s]", $1); 
+        asprintf(&$$, "%s", $1); 
         if (DEBUG) printf("Variable: %s\n", $$);
 
         if (n_parameters < MAX_VARIABLES) {
-            parameters[n_parameters++] = strdup($$);  // Agrega al array
+            parameters[n_parameters++] = $1;  // Agrega al array
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
         }
@@ -164,6 +177,18 @@ time_variable:
         }
     }
     ;
+
+function:
+//TODO include several args
+    variable L_BRK variable R_BRK
+    {
+        asprintf(&$$, "%s(%s)", $1, $3); 
+        if (DEBUG) printf("Function: %s\n", $$);
+        strcpy(functions[fun_count].name, $1);
+        strcpy(functions[fun_count].args[0], $3);
+        fun_count++;
+    };
+
 
 %%
 void print_variables() {
