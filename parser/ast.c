@@ -146,7 +146,21 @@ void write_vars()
     printf( "    enum parameter {");
     for (int i=0; i < n_parameters; i++)
     {
-        printf("%s, ", strtolower(parameters[i]));
+
+        const char* paramname = parameters[i];
+        const char* clean_param = strchr(paramname, '[');
+        if (clean_param)
+            clean_param = clean_param + 1;  // Skip the '['
+        else
+            clean_param = paramname;
+        // Copy to temp buffer and strip trailing ']'
+        char temp[128];
+        strncpy(temp, clean_param, sizeof(temp));
+        temp[sizeof(temp) - 1] = '\0';  // ensure null-terminated
+        char* closing_bracket = strchr(temp, ']');
+        if (closing_bracket) *closing_bracket = '\0';
+
+        printf("%s, ", strtolower(temp));
     }
     
     printf("n_parameters};\n\n");
@@ -190,7 +204,7 @@ void write_eval(){
     for (int i = 0; i < eq_count; i++) {
             char str_aux[256];
         fix_vars_as_params(equations[i].equation, str_aux, 256);
-        printf("        params[%s] = %s\n", strtolower(equations[i].variable), strtolower(str_aux));
+        printf("        %s = %s\n", strtolower(equations[i].variable), strtolower(str_aux));
     }
 
     for (int i = 0; i < incs_eq_count; i++) {
