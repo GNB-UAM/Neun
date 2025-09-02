@@ -157,6 +157,15 @@ variable:
         // asprintf(&$$, "params[%s_%s]", $1, $4); 
         // if (DEBUG) printf("Subindex: %s\n", $$);
     }
+    | VARIABLE SUBINDEX VARIABLE {  
+        asprintf(&$$, "%s_%s", $1, $3); 
+        if (n_parameters < MAX_VARIABLES) {
+            parameters[n_parameters++] = strdup($$);  // Agrega al array
+        if (DEBUG) printf("Subindex: %s\n", $$);
+        } else {
+            fprintf(stderr, "Error: Regular variables array is full.\n");
+        }
+    }
     | VARIABLE  {
         // $$ = strdup($1);
         
