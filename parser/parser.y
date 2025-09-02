@@ -64,6 +64,11 @@ expression:
                 incs_eq_count++;
                 is_timevariable = 0;
             }
+            else if (is_function)
+            {
+                snprintf(functions[fun_count].equation, sizeof(functions[fun_count].equation), "%s", $3);
+                fun_count++;
+            }
             else
             {
                 strcpy(equations[eq_count].variable, $1);
@@ -186,7 +191,7 @@ function:
         if (DEBUG) printf("Function: %s\n", $$);
         strcpy(functions[fun_count].name, $1);
         strcpy(functions[fun_count].args[0], $3);
-        fun_count++;
+        // fun_count++;
     };
 
 

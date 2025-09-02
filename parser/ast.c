@@ -5,11 +5,16 @@
 #include "ast.h"
 
 int is_timevariable = 0;
+int is_function = 0;
+
 int eq_count = 0;
 int incs_eq_count = 0;
+int fun_count = 0;
 
 Equation equations[MAX_EQUATIONS];
 Equation incs_equations[MAX_EQUATIONS];
+Function functions[MAX_EQUATIONS];
+
 char modelname[] = "GenericName";
 
 
@@ -177,9 +182,9 @@ void write_protected(){
     printf("    protected:\n");
 
     // Generate the function for each equation
-    for (int i = 0; i < eq_count; i++) {
-        printf("    Precission %s(Precission v) const\n{\n", strtolower(equations[i].variable));
-        printf("        return %s;\n", strtolower(equations[i].equation));
+    for (int i = 0; i < fun_count; i++) {
+        printf("    Precission %s(Precission %s) const\n{\n", strtolower(functions[i].name), strtolower(functions[i].args[0]));
+        printf("        return %s;\n", strtolower(functions[i].equation));
         printf("    }\n\n");
     }
 
