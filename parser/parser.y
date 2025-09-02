@@ -107,6 +107,10 @@ math_expression:
         asprintf(&$$, "%s / %s", $3, $6);
         if (DEBUG) printf("FRAQ: %s\n", $$);
     }
+    | MINUS math_expression  {
+        asprintf(&$$, "- %s", $2);
+        if (DEBUG) printf("Rest: %s\n", $$);
+    }
     | variable{
         $$ = strdup($1); 
         if (DEBUG) printf("variable: %s\n", $$);
@@ -214,6 +218,7 @@ void yyerror(const char *s) {
 
 int yydebug = 1; // Debugging
 int main() {
+    // TODO receive equations by arguments
     if (DEBUG) printf("Please give me model equations in LaTeX:\n");
     yyparse();
     generate_code();  // Generate code from the parsed equations.
