@@ -96,7 +96,7 @@ math_expression:
         if (DEBUG) printf("Multiplication: %s\n", $$);
     }
     | math_expression DIV math_expression  {
-        asprintf(&$$, "%s / %s", $1, $3);
+        asprintf(&$$, "(%s) / (%s)", $1, $3);
         if (DEBUG) printf("Division: %s\n", $$);
     }
     | math_expression POW math_expression  {
@@ -108,7 +108,7 @@ math_expression:
         if (DEBUG) printf("Exponential: %s\n", $$);
     }
     | FRAQ L_CB math_expression R_CB L_CB math_expression R_CB {
-        asprintf(&$$, "%s / %s", $3, $6);
+        asprintf(&$$, "(%s) / (%s)", $3, $6);
         if (DEBUG) printf("FRAQ: %s\n", $$);
     }
     | MINUS math_expression  {
