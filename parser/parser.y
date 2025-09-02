@@ -14,8 +14,8 @@ int yylex();
 %token <str> VARIABLE        
 %token <str> TIME_VARIABLE
 %token <num> NUMBER          
-%token BEGIN_EQUATION END_EQUATION SUM MINUS MULT DIV EXP EQUALSIGN
-%token L_BRK R_BRK L_CB R_CB SUBINDEX FRAQ INF
+%token BEGIN_EQUATION END_EQUATION SUM MINUS MULT DIV POW EXP EQUALSIGN 
+%token L_BRK R_BRK L_CB R_CB SUBINDEX FRAQ INF COLON
 
 /* Define datatypes for AST nodes */
 %union {
@@ -33,7 +33,7 @@ int yylex();
 /* Operators and precedence */
 %left SUM MINUS
 %left MULT DIV
-%right EXP
+%right POW EXP
 
 %%
 
@@ -99,8 +99,12 @@ math_expression:
         asprintf(&$$, "%s / %s", $1, $3);
         if (DEBUG) printf("Division: %s\n", $$);
     }
-    | math_expression EXP math_expression  {
+    | math_expression POW math_expression  {
         asprintf(&$$, "pow(%s, %s)", $1, $3);
+        if (DEBUG) printf("Potential: %s\n", $$);
+    }
+    | EXP L_BRK math_expression R_BRK {
+        asprintf(&$$, "exp(%s)", $3);
         if (DEBUG) printf("Exponential: %s\n", $$);
     }
     | FRAQ L_CB math_expression R_CB L_CB math_expression R_CB {

@@ -12,7 +12,7 @@
 "-"                  { return MINUS; }
 "*"                  { return MULT; }
 "/"                  { return DIV; }
-"^"                  { return EXP; }
+"^"                  { return POW; }
 "("                  { return L_BRK; }
 ")"                  { return R_BRK; }
 "{"                  { return L_CB; }
@@ -20,6 +20,8 @@
 "_"                  { return SUBINDEX; }
 "\\frac"             { return FRAQ; }
 "\\infty"            { return INF; }
+"\\exp"            { return EXP; }
+","            { return COLON; }
 
 
 d([a-zA-Z][a-zA-Z]*)  {
