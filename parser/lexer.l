@@ -19,7 +19,8 @@
 "}"                  { return R_CB; }
 "_"                  { return SUBINDEX; }
 "\\frac"             { return FRAQ; }
-"\{\\infty\}"            { return INF; }
+"\\infty"            { return INF; }
+
 
 d([a-zA-Z][a-zA-Z]*)  {
     yylval.str = strdup(yytext + 1);
@@ -41,12 +42,11 @@ d([a-zA-Z][a-zA-Z]*)  {
 
 [0-9]+(\.[0-9]+)?  { yylval.num = atof(yytext); return NUMBER; }
 
+%.*    // Ignore comments
 
-%.*  ;  // Ignore comments
+\\label\{[a-zA-Z0-9_]+:[a-zA-Z0-9_]+\}  
 
-\\label\{[a-zA-Z0-9_]+:[a-zA-Z0-9_]+\}  ;
-
-[ \t\n]  ;  // Ignore white spaces \n
+[ \t\n]    // Ignore white spaces \n
 
 %%
 
