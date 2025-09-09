@@ -5,6 +5,8 @@
 #include <math.h>
 #include "ast.h"  
 
+int var_registered(const char * s);
+void add_var(const char * s);
 void yyerror(const char *s);
 int yylex();
 
@@ -139,7 +141,8 @@ variable:
         asprintf(&$$, "%s_inf", $1); 
         if (DEBUG) printf("Subindex with infinity: %s\n", $$);
         if (n_parameters < MAX_VARIABLES) {
-            parameters[n_parameters++] = strdup($$);  // Agrega al array
+            add_var(strdup($$));
+            // parameters[n_parameters++] = strdup($$);  // Agrega al array
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
         }
@@ -149,7 +152,7 @@ variable:
     | VARIABLE SUBINDEX L_CB VARIABLE R_CB {  
         asprintf(&$$, "%s_%s", $1, $4); 
         if (n_parameters < MAX_VARIABLES) {
-            parameters[n_parameters++] = strdup($$);  // Agrega al array
+            add_var(strdup($$));
         if (DEBUG) printf("Subindex: %s\n", $$);
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
@@ -160,7 +163,7 @@ variable:
     | VARIABLE SUBINDEX VARIABLE {  
         asprintf(&$$, "%s_%s", $1, $3); 
         if (n_parameters < MAX_VARIABLES) {
-            parameters[n_parameters++] = strdup($$);  // Agrega al array
+            add_var(strdup($$));
         if (DEBUG) printf("Subindex: %s\n", $$);
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
@@ -173,7 +176,7 @@ variable:
         if (DEBUG) printf("Variable: %s\n", $$);
 
         if (n_parameters < MAX_VARIABLES) {
-            parameters[n_parameters++] = $1;  // Agrega al array
+            add_var($1);  // Agrega al array
         } else {
             fprintf(stderr, "Error: Regular variables array is full.\n");
         }
@@ -213,6 +216,51 @@ function:
 
 
 %%
+
+int var_registered(const char * variable)
+{
+    for (int i; i < n_parameters; i++){
+        printf("%s %s\n", parameters[i], variable);
+        if (strcmp(parameters[i], variable) == 0)
+        {
+            if (DEBUG) printf("Variable %s found, skipping...\n", variable);
+            return 1;
+        }
+}
+    printf("Variables;\n");
+    for (int i; i < n_variables; i++)
+    {
+        printf("%s %s\n", variables[i], variable);
+        if (strcmp(variables[i], variable) == 0)
+        {
+            if (DEBUG) printf("Variable %s found, skipping...\n", variable);
+            return 1;
+        }
+
+    }
+    if (DEBUG) printf("Variable %s not found, including it...\n", variable);
+    return 0;
+}
+
+
+void add_var(const char * variable)
+{
+    if (n_parameters < MAX_VARIABLES) 
+    {
+        if (!(var_registered(variable)))
+        {
+            parameters[n_parameters++] = variable;
+            if (DEBUG) printf("Including variable %s...\n", variable);
+        }
+        else
+            if (DEBUG) printf("skipping Variable %s...\n", variable);
+
+    } else {
+        fprintf(stderr, "Error: Regular variables array is full.\n");
+    }
+
+}
+
 void print_variables() {
     if (DEBUG) printf("Time Variables:\n");
     for (int i = 0; i < n_variables; i++) {
