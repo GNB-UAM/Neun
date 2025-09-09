@@ -1,0 +1,71 @@
+\begin{equation}
+\frac{dV}{dt} = \frac{1}{Cm} * (I_{inj} - I_{NaT} - I_{NaP} - I_{A} - I_{D} - I_{LVA} - I_{HVA} )
+\end{equation}
+
+\begin{equation}
+I_{NaT} = g_{NaT} * m_{\infty}^3 * h * (V - E_{Na})
+\end{equation}
+
+\begin{equation}
+I_{NaP} = g_{NaP} * r^3 * (V - E_{Na})
+\end{equation}
+
+\begin{equation}
+I_{A} = g_{A} * a^4 * b * (V - E_{K})
+\end{equation}
+
+\begin{equation}
+I_{D} = g_{D} * n^4 * (V - E_{K})
+\end{equation}
+
+\begin{equation}
+I_{LVA} = g_{LVA} * c_{\infty}^3 * d_{\infty} * (V - E_{Ca})
+\end{equation}
+
+\begin{equation}
+I_{HVA} = g_{HVA} * e^3 * f * (V - E_{Ca})
+\end{equation}
+
+\begin{equation}
+\frac{dm}{dt} = \alpha_{m}(V)*(1 - m) - \beta_{m}(V)*m
+\end{equation}
+
+\begin{equation}
+\frac{dh}{dt} = \alpha_{h}(V)*(1 - h) - \beta_{h}(V)*h
+\end{equation}
+
+\begin{equation}
+\frac{dn}{dt} = \alpha_{n}(V)*(1 - n) - \beta_{n}(V)*n
+\end{equation}
+
+\begin{equation}
+\alpha_{m}(V) = \frac{0.1 * (-V - 40)}{\exp(\frac{-V - 40}{10}) - 1}
+\end{equation}
+
+\begin{equation}
+\beta_m(V) = 4 * \exp(\frac{-V - 65}{18})
+\end{equation}
+
+\begin{equation}
+\alpha_h(V) = 0.07 * \exp(\frac{-V - 65}{20})
+\end{equation}
+
+\begin{equation}
+\beta_h(V) = \frac{1}{\exp(\frac{-V - 35}{10}) + 1}
+\end{equation}
+
+\begin{equation}
+\alpha_n(V) = \frac{0.01 * (-V - 55)}{\exp(\frac{-V - 55}{10}) - 1}
+\end{equation}
+
+\begin{equation}
+\beta_n(V) = 0.125 * \exp(\frac{-V - 65}{80})
+\end{equation}
+
+\begin{equation}
+x_{\infty}(V) = \frac{\alpha_x(V)}{\alpha_x(V) + \beta_x(V)}
+\end{equation}
+
+\begin{equation}
+\tau_x(V) = \frac{1}{\alpha_x(V) + \beta_x(V)}
+\end{equation}
