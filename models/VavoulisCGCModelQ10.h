@@ -57,7 +57,7 @@ public:
 	typedef Precission precission_t;
 
 	enum variable {v, h, r, a, b, n, e, f, n_variables};
-	enum parameter {cm, gamma_T,
+	enum parameter {t_scale, diff_T, cm, gamma_T,
 					vna, vk, vca,
 					Gnat, Gnap, Ga, Gd, Glva, Ghva,
 					Q10_Gnat, Q10_Gnap, Q10_Ga, Q10_Gd, Q10_Glva, Q10_Ghva,
@@ -72,7 +72,6 @@ public:
 					Vh_c, Vs_c, Vh_d, Vs_d,
 					dv,
 					Inat, Inap, Ia, Id, Ilva, Ihva,
-					diff_T,
 					n_parameters};
 
 	static constexpr std::vector<std::string> VarNames()
@@ -82,7 +81,7 @@ public:
 
 	static constexpr std::vector<std::string> ParamNames()
 	{
-			return std::vector<std::string> {"cm", "gamma_T",
+			return std::vector<std::string> {"t_scale", "diff_T", "cm", "gamma_T",
 						"vna", "vk", "vca",
 						"Gnat", "Gnap", "Ga", "Gd", "Glva", "Ghva",
 						"Q10_Gnat", "Q10_Gnap", "Q10_Ga", "Q10_Gd", "Q10_Glva", "Q10_Ghva",
@@ -96,8 +95,8 @@ public:
 						"Vh_m", "Vs_m",
 						"Vh_c", "Vs_c", "Vh_d", "Vs_d",
 						"dv",
-						"Inat", "Inap", "Ia", "Id", "Ilva", "Ihva",
-						"diff_T"};
+						"Inat", "Inap", "Ia", "Id", "Ilva", "Ihva"
+						};
 	}
 protected:
 
@@ -181,31 +180,31 @@ public:
 
 	void eval(const Precission * const vars, Precission * const params, Precission * const incs) const
 	{
-		incs[h]=incr_x(phi_q10(params[Q10_h], params[diff_T]),
+		incs[h]= params[t_scale] * incr_x(phi_q10(params[Q10_h], params[diff_T]),
 					 vars[h], vars[v], params[vh_h], params[vs_h],
 					  params[tau0_h], params[delta_h]);
 
-		incs[r]=incr_x(phi_q10(params[Q10_r], params[diff_T]),
+		incs[r]= params[t_scale] * incr_x(phi_q10(params[Q10_r], params[diff_T]),
 					 vars[r], vars[v], params[vh_r], params[vs_r],
 					  params[tau0_r], params[delta_r]);
 
-		incs[a]=incr_x(phi_q10(params[Q10_a], params[diff_T]),
+		incs[a]= params[t_scale] * incr_x(phi_q10(params[Q10_a], params[diff_T]),
 					 vars[a], vars[v], params[vh_a], params[vs_a],
 					  params[tau0_a], params[delta_a]);
 
-		incs[b]=incr_x(phi_q10(params[Q10_b], params[diff_T]),
+		incs[b]= params[t_scale] * incr_x(phi_q10(params[Q10_b], params[diff_T]),
 					 vars[b], vars[v], params[vh_b], params[vs_b],
 					  params[tau0_b], params[delta_b]);
 
-		incs[n]=incr_x(phi_q10(params[Q10_n], params[diff_T]),
+		incs[n]= params[t_scale] * incr_x(phi_q10(params[Q10_n], params[diff_T]),
 					 vars[n], vars[v], params[vh_n], params[vs_n],
 					  params[tau0_n], params[delta_n]);
 
-		incs[e]=incr_x(phi_q10(params[Q10_e], params[diff_T]),
+		incs[e]= params[t_scale] * incr_x(phi_q10(params[Q10_e], params[diff_T]),
 					 vars[e], vars[v], params[vh_e], params[vs_e],
 					  params[tau0_e], params[delta_e]);
 
-		incs[f]=incr_x(phi_q10(params[Q10_f], params[diff_T]),
+		incs[f]= params[t_scale] * incr_x(phi_q10(params[Q10_f], params[diff_T]),
 					 vars[f], vars[v], params[vh_f], params[vs_f],
 					  params[tau0_f], params[delta_f]);
 
@@ -219,7 +218,7 @@ public:
 								 params[Vh_c], params[Vs_c], params[Vh_d], params[Vs_d]);
 		params[Ihva] = ihva(vars[v], vars[e], vars[f], g_q10(params[Q10_Ghva], params[Ghva], params[diff_T]), params[vca]);
 
-		incs[v] = (SYNAPTIC_INPUT 
+		incs[v] = params[t_scale] * (SYNAPTIC_INPUT 
 					- params[Inat] - params[Inap] 
 					- params[Ia] - params[Id]
 					- params[Ilva] - params[Ihva])

@@ -133,7 +133,7 @@ class GradualActivationSynapsis
         m_steps(synapse.m_steps),
         System(synapse) {}
 
-  precission step(precission h) {
+  void step(precission h) {
     //Vpre parameter updated from Presynaptic neuron value.
     System::m_parameters[System::v_pre]=m_n1.get(m_n1_variable); 
 
@@ -147,8 +147,6 @@ class GradualActivationSynapsis
         (m_n2.get(m_n2_variable) - System::m_parameters[System::esyn]);
 
     m_n2.add_synaptic_input(System::m_variables[System::i]);
-
-    return System::m_variables[System::i];
   }
 };
 

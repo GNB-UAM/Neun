@@ -1,0 +1,5 @@
+ast.o
+lexer.c
+parser
+parser.tab.c
+parser.tab.h
