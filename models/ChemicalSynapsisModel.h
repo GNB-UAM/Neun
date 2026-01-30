@@ -66,6 +66,26 @@ class ChemicalSynapsisModel {
     i,
     n_parameters
   };
+  
+  static constexpr std::vector<std::string> ParamNames()
+    {
+        return std::vector<std::string> {
+            "v_pre",
+            "gfast",
+            "Esyn",
+            "sfast",
+            "Vfast",
+            "gslow",
+            "k1",
+            "k2",
+            "sslow",
+            "Vslow",
+            "ifast",
+            "islow",
+            "i",
+            "n_parameters"
+              };
+    }
 
   typedef precission precission_t;
 

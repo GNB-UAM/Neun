@@ -46,6 +46,15 @@ $Id: HindmarshRoseModel.h 203 2007-06-26 14:46:34Z elferdo $
  * e = 3.0
  * mu = 0.0021
  * S = 4
+  args.params[Neuron::e] = 3.281;
+  args.params[Neuron::mu] = 0.0029;
+  args.params[Neuron::S] = 4;
+  args.params[Neuron::a] = 1;
+  args.params[Neuron::b] = 3;
+  args.params[Neuron::c] = 1;
+  args.params[Neuron::d] = 5;
+  args.params[Neuron::xr] = -1.6;
+  args.params[Neuron::vh] = 1;
  */
 
 template <typename Precission>
@@ -54,7 +63,16 @@ class HindmarshRoseModel : public NeuronBase<Precission> {
   typedef Precission precission_t;
 
   enum variable { x, y, z, n_variables };
-  enum parameter { e, mu, S, n_parameters };
+  enum parameter { e, mu, S, a, b, c, d, xr, vh, n_parameters };
+	
+	static constexpr std::vector<std::string> VarNames()
+	{
+		return std::vector<std::string> {"x", "y", "z"};
+	}
+  static constexpr std::vector<std::string> ParamNames()
+	{
+			return std::vector<std::string> {"e", "mu", "S", "a", "b", "c", "d", "xr", "vh"};
+	}
 
  protected:
   Precission m_variables[n_variables];
@@ -63,10 +81,10 @@ class HindmarshRoseModel : public NeuronBase<Precission> {
  public:
   void eval(const Precission *const vars, Precission *const params,
             Precission *const incs) const {
-    incs[x] = vars[y] + 3.0 * vars[x] * vars[x] - vars[x] * vars[x] * vars[x] -
+    incs[x] = vars[y] + params[b] * vars[x] * vars[x] -  params[a] * vars[x] * vars[x] * vars[x] -
               vars[z] + params[e] + SYNAPTIC_INPUT;
-    incs[y] = 1 - 5.0 * vars[x] * vars[x] - vars[y];
-    incs[z] = params[mu] * (-vars[z] + params[S] * (vars[x] + 1.6));
+    incs[y] = params[c] - params[d] * vars[x] * vars[x] - vars[y];
+    incs[z] = params[mu] * ((-vars[z] * params[vh]) + params[S] * (vars[x] - params[xr]));
   }
 };
 

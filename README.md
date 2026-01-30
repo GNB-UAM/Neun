@@ -1,6 +1,6 @@
 # Neun
 
-![CMake v2.8 dependency](https://img.shields.io/badge/cmake-v2.8-blue?style=flat-square)
+![CMake v3.5 dependency](https://img.shields.io/badge/cmake-v3.5-blue?style=flat-square)
 
 A library for the simulation of dynamical systems, aimed to model neural
 networks with high performance. It is written in an object oriented fashion

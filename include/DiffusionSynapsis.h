@@ -53,7 +53,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 template <typename TNode1, typename TNode2, typename TIntegrator,
           typename precission = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
-    IntegratorConcept<TIntegrator>
+    IntegratorConcept<TIntegrator, SerializableWrapper<SystemWrapper<DiffusionSynapsisModel<precission>>>>
 class DiffusionSynapsis
     : public SerializableWrapper<
           SystemWrapper<DiffusionSynapsisModel<precission> > > {
