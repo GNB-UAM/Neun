@@ -94,7 +94,7 @@ class ChemicalSynapsisModel {
 
   void eval(const precission* const vars, const precission* const params,
             precission* const incs) const {
-      incs[mslow] = ((params[k1] * (1 - params[mslow])) / (1 + exp(params[sslow] * (params[Vslow] - params[v_pre])))) - params[k2] * vars[mslow];
+      incs[mslow] = ((params[k1] * (1 - vars[mslow])) / (1 + exp(params[sslow] * (params[Vslow] - params[v_pre])))) - params[k2] * vars[mslow];
   }
 };
 
