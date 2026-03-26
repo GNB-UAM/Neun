@@ -69,8 +69,8 @@ class GradualActivationSynapsisModel {
             precission* const incs) const {
     
       precission r_inf = 1 / (1 + exp( (params[v_r] - params[v_pre]) / params[dec_slope]));
-      incs[r] = (r_inf - vars[r]) / tau_syn;
-      incs[s] = (vars[r] - vars[s]) / tau_syn;
+      incs[r] = (r_inf - vars[r]) / params[tau_syn];
+      incs[s] = (vars[r] - vars[s]) / params[tau_syn];
   }
 };
 
