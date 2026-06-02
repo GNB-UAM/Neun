@@ -1,6 +1,6 @@
 /*************************************************************
 
-Copyright (c) 2025  Alicia Garrido-Peña <alicia.garrido@uam.es>
+Copyright (c) 2026  Gonzalo Jiménez Carretero
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -31,73 +31,47 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef CHEMICAL_SYNAPSIS_MODEL_H_
-#define CHEMICAL_SYNAPSIS_MODEL_H_
+#ifndef LINSKER_SYNAPSE_MODEL_H_
+#define LINSKER_SYNAPSE_MODEL_H_
 
-#ifndef __AVR_ARCH__
-#include <type_traits>
-#endif  //__AVR_ARCH__
-#include<cmath>
-#include<vector> //new for g++ 13.3.03
-#include<string> //new for g++ 13.3.03
+#include "SynapseWeightNormalizer.h"
 
 /**
- * @brief Implements a synapsis based on  (Golowasch et al., 1999 )
+ * @brief Implements a synapsis based on (Linsker 1986)
  */
 template <typename precission = double>
-class ChemicalSynapsisModel {
+class LinskerSynapseModel {
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
 #endif  //__AVR_ARCH__
 
  public:
-  enum variable {mslow, n_variables};
-  enum parameter {
-    v_pre,
-    gfast,
-    Esyn,
-    sfast,
-    Vfast,
-    gslow,
-    k1,
-    k2,
-    sslow,
-    Vslow,
-    ifast,
-    islow,
-    i,
-    n_parameters
-  };
-  
-  static constexpr std::vector<std::string> ParamNames()
-    {
-        return std::vector<std::string> {
-            "v_pre",
-            "gfast",
-            "Esyn",
-            "sfast",
-            "Vfast",
-            "gslow",
-            "k1",
-            "k2",
-            "sslow",
-            "Vslow",
-            "ifast",
-            "islow",
-            "i",
-            "n_parameters"
-              };
-    }
+    enum variable {
+      w,        // Synaptic efficacy
+      n_variables
+    };
 
-  typedef precission precission_t;
+    enum parameter {
+      v_pre,    // Presynaptic neuron's voltage (membrane potential)
+      v_post,   // Postsynaptic neuron's voltage (membrane potential)
+      xo,       // Constant for presynaptic neuron
+      yo,       // Constant for postsynaptic neuron
+      eta,      // Learning rate
+      k1,       // Constant
+      w_max,    // Maximum allowed synaptic weight (w_min = -wmax)
+      i,        // Synaptic intensity
+      n_parameters
+    };
+
+    typedef precission precission_t;
 
  public:
-  ChemicalSynapsisModel() {}
+    LinskerSynapseModel() {}
 
-  void eval(const precission* const vars, const precission* const params,
-            precission* const incs) const {
-      incs[mslow] = ((params[k1] * (1 - vars[mslow])) / (1 + exp(params[sslow] * (params[Vslow] - params[v_pre])))) - params[k2] * vars[mslow];
-  }
+    void eval(const precission* const vars, const precission* const params,
+              precission* const incs) const {
+        incs[w] = params[eta] * ((params[v_pre] - params[xo]) * (params[v_post] - params[yo]) + params[k1]);
+    }
 };
 
-#endif /*CHEMICAL_SYNAPSIS_MODEL_H_*/
+#endif /*LINSKER_SYNAPSE_MODEL_H_*/
