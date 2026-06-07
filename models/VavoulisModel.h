@@ -86,17 +86,59 @@ class VavoulisModel : public NeuronBase<Precission> {
     return 90 * n * n * n * n * (va + 90);
   }
 
-  Precission incr_p(type t, Precission p, Precission v,
-                    Precission tau_p) const {
-    // switch (t) {
-    Precission pinf = 1 / (1 + exp((-61.6 - v) / 5.6));
+  Precission incr_p(type t, Precission p, Precission v, Precission va,
+                    Precission tau_p_param) const {
+    Precission pinf;
+    Precission tau_p;
+    switch (t) {
+      case n1m:
+        // Tabla 1: p_inf = 1/(1+exp((-38.8-V_S)/10)), tau_p = 250 ms (constante)
+        pinf = 1 / (1 + exp((-38.8 - v) / 10.0));
+        tau_p = tau_p_param;
+        break;
+      case n2v:
+        // Tabla 1: p_inf = 1/(1+exp((-51-V_S)/10.3))
+        // tau_p = 28.3 + 44.1 * exp(-((-11.8-V_A)/26.6)^2)
+        pinf = 1 / (1 + exp((-51.0 - v) / 10.3));
+        tau_p = 28.3 + 44.1 * exp(-pow((-11.8 - va) / 26.6, 2));
+        break;
+      case n3t:
+        // Tabla 1: p_inf = 1/(1+exp((-61.6-V_S)/5.6)), tau_p = 4 ms (constante)
+        pinf = 1 / (1 + exp((-61.6 - v) / 5.6));
+        tau_p = tau_p_param;
+        break;
+      case so:
+      default:
+        // SO es pasivo, no tiene variable p
+        return 0;
+    }
     return (pinf - p) / tau_p;
   }
 
-  Precission incr_q(type t, Precission q, Precission v,
-                    Precission tau_q) const {
-    // switch (t) {
-    Precission qinf = 1 / (1 + exp((-73.2 - v) / -5.1));
+  Precission incr_q(type t, Precission q, Precission v, Precission va,
+                    Precission tau_q_param) const {
+    Precission qinf;
+    Precission tau_q;
+    switch (t) {
+      case n1m:
+        // N1M no usa variable q (solo p^3)
+        return 0;
+      case n2v:
+        // Tabla 1: q_inf = 1/(1+exp((-45-V_S)/-3))
+        // tau_q = 187.6 + 637.7 * exp(-((-9.5-V_A)/23.3)^2)
+        qinf = 1 / (1 + exp((-45.0 - v) / -3.0));
+        tau_q = 187.6 + 637.7 * exp(-pow((-9.5 - va) / 23.3, 2));
+        break;
+      case n3t:
+        // Tabla 1: q_inf = 1/(1+exp((-73.2-V_S)/-5.1)), tau_q = 400 ms (constante)
+        qinf = 1 / (1 + exp((-73.2 - v) / -5.1));
+        tau_q = tau_q_param;
+        break;
+      case so:
+      default:
+        // SO es pasivo, no tiene variable q
+        return 0;
+    }
     return (qinf - q) / tau_q;
   }
 
@@ -115,26 +157,24 @@ class VavoulisModel : public NeuronBase<Precission> {
   }
 
  public:
-  VavoulisModel(ConstructorArgs const &args) {
-    std::copy(args.params, args.params + n_parameters, m_parameters);
-    std::copy(args.variables, args.variables + n_variables, m_variables);
-  }
-
   void eval(const Precission *const vars, Precission *const params,
             Precission *const incs) const {
     incs[v] = (-SYNAPTIC_INPUT - il(vars[v]) -
                   ix((type)params[n_type], vars[v], vars[p], vars[q]) -
-                  iec(vars[v], vars[va], vars[g_ecs]))/10;
+                  iec(vars[v], vars[va], params[g_ecs]))/10;
 
     incs[va] = (-il(vars[va]) - inat(vars[va], vars[h]) - ik(vars[va], vars[n]) -
-                   iec(vars[va], vars[v], vars[g_eca]))/10;
+                   iec(vars[va], vars[v], params[g_eca]))/10;
 
-    incs[p] = incr_p((type)params[n_type], vars[p], vars[v], params[tau_p]);
-    incs[q] = incr_q((type)params[n_type], vars[q], vars[v], params[tau_q]);
+    // Para N2v, tau_p y tau_q dependen del voltaje axonal (va)
+    // Para N1M y N3t, se usan los valores constantes del parametro
+    incs[p] = incr_p((type)params[n_type], vars[p], vars[v], vars[va], params[tau_p]);
+    incs[q] = incr_q((type)params[n_type], vars[q], vars[v], vars[va], params[tau_q]);
 
     incs[h] = incr_h(vars[h], vars[va]);
     incs[n] = incr_n(vars[n], vars[va]);
   }
 };
+
 
 #endif /*VAVOULISMODEL_H_*/
