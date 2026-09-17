@@ -1,6 +1,7 @@
 /*************************************************************
 
-Copyright (c) 2025, Alicia Garrido-Peña <alicia.garrido@uam.es>
+Copyright (c) 2006-2010 Fernando Herrero Carrón
+              2017-2020, Angel Lareo <angel.lareo@gmail.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -31,8 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef CHEMICAL_SYNAPSIS_H_
-#define CHEMICAL_SYNAPSIS_H_
+#ifndef DIFFUSIONSYNAPSE_H_
+#define DIFFUSIONSYNAPSE_H_
 
 #ifndef __AVR_ARCH__
 #include <type_traits>
@@ -41,25 +42,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "NeuronConcept.h"
 #endif  //__AVR_ARCH__
 
-#include "ChemicalSynapsisModel.h"
+#include "DiffusionSynapseModel.h"
 #include "IntegratedSystemWrapper.h"
 #include "SerializableWrapper.h"
 #include "SystemWrapper.h"
 
-#include <cmath>
-
 /**
- * @brief Implements a synapsis based on (Golowasch et al. )
+ * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
 template <typename TNode1, typename TNode2, typename TIntegrator,
           typename precission = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
-    IntegratorConcept<TIntegrator, SerializableWrapper<
-          SystemWrapper<ChemicalSynapsisModel<precission> > > >
-
-class ChemicalSynapsis
+    IntegratorConcept<TIntegrator, SerializableWrapper<SystemWrapper<DiffusionSynapseModel<precission>>>>
+class DiffusionSynapse
     : public SerializableWrapper<
-          SystemWrapper<ChemicalSynapsisModel<precission> > > {
+          SystemWrapper<DiffusionSynapseModel<precission> > > {
  private:
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
@@ -76,7 +73,7 @@ class ChemicalSynapsis
   const typename TNode2::variable m_n2_variable;
 
   typedef SerializableWrapper<
-      SystemWrapper<ChemicalSynapsisModel<precission> > >
+      SystemWrapper<DiffusionSynapseModel<precission> > >
       System;
 
   const int m_steps;
@@ -88,97 +85,87 @@ class ChemicalSynapsis
 
   typedef typename System::ConstructorArgs ConstructorArgs;
 
-  /** TODO:
+  /**
    * @param palpha Rise time constant
    * @param pbeta  Decrease time constant
-   * @param pthreshold Threshold at which the synapsis activates
+   * @param pthreshold Threshold at which the synapse activates
    * @param pesyn Inversion potential (with respect to the postsynaptic
    * potential)
-   * @param pgsyn Maximum conductance of the synapsis
+   * @param pgsyn Maximum conductance of the synapse
    * @param pT Concentration of neurotransmitter at release time
    * @param pmax_release_time Width of the pulse at which neurotransmitter is
    * released
    */
-  ChemicalSynapsis(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
+  DiffusionSynapse(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
                     typename TNode2::variable v2, ConstructorArgs &args,
                     int steps)
-      : m_n1(n1),
+      : m_release_time(0),
+        m_n1(n1),
         m_n2(n2),
         m_n1_variable(v),
         m_n2_variable(v2),
         System(args),
         m_steps(steps) {
-          for(int i=0; i < System::n_variables; i++)
-          {
-            System::m_variables[i] = 0;
-          }
-        }
+    System::m_variables[System::r] = 0;
+    System::m_variables[System::i] = 0;
+  }
 
-  ChemicalSynapsis(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
+  DiffusionSynapse(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
                     typename TNode2::variable v2, ConstructorArgs &&args,
                     int steps)
-      : m_n1(n1),
+      : m_release_time(0),
+        m_n1(n1),
         m_n2(n2),
         m_n1_variable(v),
         m_n2_variable(v2),
         System(args),
         m_steps(steps) {
-          for(int i=0; i < System::n_variables; i++)
-          {
-            System::m_variables[i] = 0;
-          }
+    System::m_variables[System::r] = 0;
+    System::m_variables[System::i] = 0;
+  }
 
-        }
-
-  ChemicalSynapsis(TNode1 const &n1, TNode2 &n2,
-                    ChemicalSynapsis const &synapse)
-      : m_n1(n1),
+  DiffusionSynapse(TNode1 const &n1, TNode2 &n2,
+                    DiffusionSynapse const &synapse)
+      : m_release_time(synapse.m_release_time),
+        m_last_value_pre(synapse.m_last_value_pre),
+        m_n1(n1),
         m_n2(n2),
         m_n1_variable(synapse.m_n1_variable),
         m_n2_variable(synapse.m_n2_variable),
         m_steps(synapse.m_steps),
         System(synapse) {}
-  
-  // TODO include a constructor without neurons for precission voltage input only
 
   void step(precission h) {
-    //Vpre parameter updated from Presynaptic neuron value (must be defined in synapsisModel params)
-    System::m_parameters[System::v_pre]=m_n1.get(m_n1_variable); 
-    precission v_post = m_n2.get(m_n2_variable);
-
     for (int i = 0; i < m_steps; ++i) {
+      precission value = m_n1.get(m_n1_variable);
+
+      if ((m_last_value_pre < System::m_parameters[System::threshold]) &&
+          (value >= System::m_parameters[System::threshold])) {
+        System::m_release = true;
+
+        m_release_time = 0;
+      }
+
+      if (System::m_release) {
+        m_release_time += h;
+
+        if (m_release_time > System::m_parameters[System::max_release_time]) {
+          System::m_release = false;
+        }
+      }
+
       TIntegrator::step(*this, h, System::m_variables, System::m_parameters);
+
+      m_last_value_pre = value;
     }
 
-    /* (Golowasch, 1999) */
-    System::m_parameters[System::ifast] = (System::m_parameters[System::gfast] * (v_post - System::m_parameters[System::Esyn])) /
-                                          (1 + exp(System::m_parameters[System::sfast] * (System::m_parameters[System::Vfast] - System::m_parameters[System::v_pre])));
+    /* (Destexhe, 1994) */
+    System::m_variables[System::i] =
+        System::m_parameters[System::gsyn] * System::m_variables[System::r] *
+        (m_n2.get(m_n2_variable) - System::m_parameters[System::esyn]);
 
-
-    System::m_parameters[System::islow] = System::m_parameters[System::gslow] * System::m_variables[System::mslow] * (v_post - System::m_parameters[System::Esyn]);
-    
-    System::m_parameters[System::i] = System::m_parameters[System::ifast]+System::m_parameters[System::islow];
-  }
-
-  void step(precission h, precission vpre, precission vpost) {
-    //Vpre parameter updated from Presynaptic neuron value (must be defined in synapsisModel params)
-    
-    System::m_parameters[System::v_pre]= vpre;
-    precission v_post = vpost;
-
-    for (int i = 0; i < m_steps; ++i) {
-      TIntegrator::step(*this, h, System::m_variables, System::m_parameters);
-    }
-
-    /* (Golowasch, 1999) */
-    System::m_parameters[System::ifast] = (System::m_parameters[System::gfast] * (v_post - System::m_parameters[System::Esyn])) /
-                                          (1 + exp(System::m_parameters[System::sfast] * (System::m_parameters[System::Vfast] - System::m_parameters[System::v_pre])));
-
-
-    System::m_parameters[System::islow] = System::m_parameters[System::gslow] * System::m_variables[System::mslow] * (v_post - System::m_parameters[System::Esyn]);
-    
-    System::m_parameters[System::i] = System::m_parameters[System::ifast]+System::m_parameters[System::islow];
+    m_n2.add_synaptic_input(System::m_variables[System::i]);
   }
 };
 
-#endif /*CHEMICAL_SYNAPSIS_H_*/
+#endif /*DIFFUSIONSYNAPSE_H_*/

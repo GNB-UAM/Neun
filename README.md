@@ -195,14 +195,14 @@ Wrappers provide functionality layers:
 | **Matsuoka**       | MatsuokaOscillatorModel  | CPG oscillator (Matsuoka, 1985) |
 | **RowatSelverston**| RowatSelverstonModel     | Rowat and Selverston model (1997) |
 
-### Synapsis
+### Synapse
 | Model | Class Name | Description |
 |-------|------------|-------------|
-| **DiffusionSynapsis** | DiffusionSynapsisModel    | Chemical synapse (Destexhe et al., 1994) |
-| **Gradual activation synapse**       | GradualActivationSynapsisModel  | Gradual activation model |
-| **Gap junction**| ElectricalSynapsis     | Gap junction |
-| **Direct synapsis**| DirectSynapsis     | Direct conductance coupling |
-| **Sigmoidal activation**| SigmoidalDirectSynapsis     | Sigmoidal activation |
+| **DiffusionSynapse** | DiffusionSynapseModel    | Chemical synapse (Destexhe et al., 1994) |
+| **Gradual activation synapse**       | GradualActivationSynapseModel  | Gradual activation model |
+| **Gap junction**| ElectricalSynapse     | Gap junction |
+| **Direct synapse**| DirectSynapse     | Direct conductance coupling |
+| **Sigmoidal activation**| SigmoidalDirectSynapse     | Sigmoidal activation |
 
 ### Utility Components
 

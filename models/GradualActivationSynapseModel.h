@@ -1,7 +1,7 @@
 /*************************************************************
 
-Copyright (c) 2006, Fernando Herrero Carrón
-              2020, Angel Lareo <angel.lareo@gmail.com>
+Copyright (c) 2021, Angel Lareo <angel.lareo@gmail.com>
+                    Alicia Garrido-Peña <alicia.garrido@uam.es>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -32,51 +32,46 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef DIRECTSYNAPSIS_H_
-#define DIRECTSYNAPSIS_H_
+#ifndef GRADUAL_ACTIVATION_SYNAPSE_MODEL_H_
+#define GRADUAL_ACTIVATION_SYNAPSE_MODEL_H_
 
+#ifndef __AVR_ARCH__
 #include <type_traits>
-
-#include "NeuronConcept.h"
+#endif  //__AVR_ARCH__
 
 /**
- * Implements a conductance based synapsis with threshold.
+ * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
-
-template <typename TNode1, typename TNode2, typename precission = double>
-requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
-class DirectSynapsis {
+template <typename precission = double>
+class GradualActivationSynapseModel {
+#ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
+#endif  //__AVR_ARCH__
 
  public:
-  enum parameter { g, t, n_parameters };
+  enum variable { r, s, i, n_variables };
+  enum parameter {
+    esyn,
+    gsyn,
+    tau_syn,
+    v_pre,
+    v_r,
+    dec_slope,
+    n_parameters
+  };
 
- private:
-  DirectSynapsis(DirectSynapsis &s) {}
-
-  void operator=(DirectSynapsis &s) {}
-
-  precission m_parameters[n_parameters];
-
-  TNode1 const &m_n1;
-  TNode2 &m_n2;
-
-  const typename TNode1::variable m_n1_variable;
+  typedef precission precission_t;
 
  public:
-  DirectSynapsis(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
-                 precission pg = 1, precission pt = 0)
-      : m_n1(n1), m_n2(n2), m_n1_variable(v) {
-    m_parameters[g] = pg;
-    m_parameters[t] = pt;
-  }
+  GradualActivationSynapseModel() {}
 
-  void step(precission h) {
-    const precission value = m_n1.get_variable(m_n1_variable);
-
-    if (value > m_parameters[DirectSynapsis::t]) {
-      m_n2.add_synaptic_input(m_parameters[g] * value);
-    }
+  void eval(const precission* const vars, const precission* const params,
+            precission* const incs) const {
+    
+      precission r_inf = 1 / (1 + exp( (params[v_r] - params[v_pre]) / params[dec_slope]));
+      incs[r] = (r_inf - vars[r]) / params[tau_syn];
+      incs[s] = (vars[r] - vars[s]) / params[tau_syn];
   }
 };
-#endif /*DIRECTSYNAPSIS_H_*/
+
+#endif /*GRADUAL_ACTIVATION_SYNAPSE_MODEL_H_*/

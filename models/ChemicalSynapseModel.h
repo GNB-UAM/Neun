@@ -31,19 +31,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef CHEMICAL_SYNAPSIS_MODEL_H_
-#define CHEMICAL_SYNAPSIS_MODEL_H_
+#ifndef CHEMICAL_SYNAPSE_MODEL_H_
+#define CHEMICAL_SYNAPSE_MODEL_H_
 
 #ifndef __AVR_ARCH__
 #include <type_traits>
 #endif  //__AVR_ARCH__
 #include<cmath>
+#include <vector>
+#include <string>
 
 /**
- * @brief Implements a synapsis based on  (Golowasch et al., 1999 )
+ * @brief Implements a synapse based on  (Golowasch et al., 1999 )
  */
 template <typename precission = double>
-class ChemicalSynapsisModel {
+class ChemicalSynapseModel {
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
 #endif  //__AVR_ARCH__
@@ -90,7 +92,7 @@ class ChemicalSynapsisModel {
   typedef precission precission_t;
 
  public:
-  ChemicalSynapsisModel() {}
+  ChemicalSynapseModel() {}
 
   void eval(const precission* const vars, const precission* const params,
             precission* const incs) const {
@@ -98,4 +100,4 @@ class ChemicalSynapsisModel {
   }
 };
 
-#endif /*CHEMICAL_SYNAPSIS_MODEL_H_*/
+#endif /*CHEMICAL_SYNAPSE_MODEL_H_*/

@@ -30,11 +30,11 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-$Id: ElectricalSynapsis.h 184 2007-06-04 11:26:12Z elferdo $
+$Id: ElectricalSynapse.h 184 2007-06-04 11:26:12Z elferdo $
 *************************************************************/
 
-#ifndef ELECTRICALSYNAPSIS_H_
-#define ELECTRICALSYNAPSIS_H_
+#ifndef ELECTRICALSYNAPSE_H_
+#define ELECTRICALSYNAPSE_H_
 
 #include <iostream>
 #include <type_traits>
@@ -42,7 +42,7 @@ $Id: ElectricalSynapsis.h 184 2007-06-04 11:26:12Z elferdo $
 #include "NeuronConcept.h"
 
 /**
- * @brief Implements a synapsis that balances current between two neurons
+ * @brief Implements a synapse that balances current between two neurons
  * depending on the difference of their potentials.
  * @param TNode1 Type of the first neuron
  * @param TNode2 Type of the second neuron
@@ -50,7 +50,7 @@ $Id: ElectricalSynapsis.h 184 2007-06-04 11:26:12Z elferdo $
 
 template <typename TNode1, typename TNode2, typename precission = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
-class ElectricalSynapsis {
+class ElectricalSynapse {
   static_assert(std::is_floating_point<precission>::value);
 
  public:
@@ -60,9 +60,9 @@ class ElectricalSynapsis {
   typedef precission precission_t;
 
  private:
-  ElectricalSynapsis(ElectricalSynapsis &s) {}
+  ElectricalSynapse(ElectricalSynapse &s) {}
 
-  void operator=(ElectricalSynapsis &s) {}
+  void operator=(ElectricalSynapse &s) {}
 
   TNode1 &m_n1;
   TNode2 &m_n2;
@@ -83,7 +83,7 @@ class ElectricalSynapsis {
    * @param pg1 Synaptic weight from @c n2 to n1
    * @param pg2 Synaptic weight from @c n1 to n2
    */
-  ElectricalSynapsis(TNode1 &n1, typename TNode1::variable v1, TNode2 &n2,
+  ElectricalSynapse(TNode1 &n1, typename TNode1::variable v1, TNode2 &n2,
                      typename TNode2::variable v2, precission pg1,
                      precission pg2)
       : m_n1(n1), m_n2(n2), m_n1_variable(v1), m_n2_variable(v2) {
@@ -122,4 +122,4 @@ class ElectricalSynapsis {
   }
 };
 
-#endif /*ELECTRICALSYNAPSIS_H_*/
+#endif /*ELECTRICALSYNAPSE_H_*/

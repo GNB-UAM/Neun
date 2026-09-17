@@ -32,8 +32,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef GRADUAL_ACTIVATION_SYNAPSIS_H_
-#define GRADUAL_ACTIVATION_SYNAPSIS_H_
+#ifndef GRADUAL_ACTIVATION_SYNAPSE_H_
+#define GRADUAL_ACTIVATION_SYNAPSE_H_
 
 #ifndef __AVR_ARCH__
 #include <type_traits>
@@ -42,21 +42,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "NeuronConcept.h"
 #endif  //__AVR_ARCH__
 
-#include "GradualActivationSynapsisModel.h"
+#include "GradualActivationSynapseModel.h"
 #include "IntegratedSystemWrapper.h"
 #include "SerializableWrapper.h"
 #include "SystemWrapper.h"
 
 /**
- * @brief Implements a synapsis based on (Destexhe et al. 1994)
+ * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
 template <typename TNode1, typename TNode2, typename TIntegrator,
           typename precission = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
     IntegratorConcept<TIntegrator>
-class GradualActivationSynapsis
+class GradualActivationSynapse
     : public SerializableWrapper<
-          SystemWrapper<GradualActivationSynapsisModel<precission> > > {
+          SystemWrapper<GradualActivationSynapseModel<precission> > > {
  private:
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
@@ -73,7 +73,7 @@ class GradualActivationSynapsis
   const typename TNode2::variable m_n2_variable;
 
   typedef SerializableWrapper<
-      SystemWrapper<GradualActivationSynapsisModel<precission> > >
+      SystemWrapper<GradualActivationSynapseModel<precission> > >
       System;
 
   const int m_steps;
@@ -88,15 +88,15 @@ class GradualActivationSynapsis
   /** TODO:
    * @param palpha Rise time constant
    * @param pbeta  Decrease time constant
-   * @param pthreshold Threshold at which the synapsis activates
+   * @param pthreshold Threshold at which the synapse activates
    * @param pesyn Inversion potential (with respect to the postsynaptic
    * potential)
-   * @param pgsyn Maximum conductance of the synapsis
+   * @param pgsyn Maximum conductance of the synapse
    * @param pT Concentration of neurotransmitter at release time
    * @param pmax_release_time Width of the pulse at which neurotransmitter is
    * released
    */
-  GradualActivationSynapsis(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
+  GradualActivationSynapse(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
                     typename TNode2::variable v2, ConstructorArgs &args,
                     int steps)
       : m_n1(n1),
@@ -110,7 +110,7 @@ class GradualActivationSynapsis
     System::m_variables[System::i] = 0;
   }
 
-  GradualActivationSynapsis(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
+  GradualActivationSynapse(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
                     typename TNode2::variable v2, ConstructorArgs &&args,
                     int steps)
       : m_n1(n1),
@@ -124,8 +124,8 @@ class GradualActivationSynapsis
     System::m_variables[System::i] = 0;
   }
 
-  GradualActivationSynapsis(TNode1 const &n1, TNode2 &n2,
-                    GradualActivationSynapsis const &synapse)
+  GradualActivationSynapse(TNode1 const &n1, TNode2 &n2,
+                    GradualActivationSynapse const &synapse)
       : m_n1(n1),
         m_n2(n2),
         m_n1_variable(synapse.m_n1_variable),
@@ -150,4 +150,4 @@ class GradualActivationSynapsis
   }
 };
 
-#endif /*GRADUAL_ACTIVATION_SYNAPSIS_H_*/
+#endif /*GRADUAL_ACTIVATION_SYNAPSE_H_*/

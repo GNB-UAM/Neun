@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *************************************************************/
 
 #include <DifferentialNeuronWrapper.h>
-#include <ChemicalSynapsis.h>
+#include <ChemicalSynapse.h>
 #include <HodgkinHuxleyModel.h>
 #include <SystemWrapper.h>
 #include <RungeKutta4.h>
@@ -40,8 +40,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef RungeKutta4 Integrator;
 typedef DifferentialNeuronWrapper<SystemWrapper<HodgkinHuxleyModel<double>>, Integrator> HH;
-typedef ChemicalSynapsis<HH, HH, Integrator, double> Synapsis;
-// typedef ChemicalSynapsisModel<double> SynapsisModel;
+typedef ChemicalSynapse<HH, HH, Integrator, double> Synapse;
+// typedef ChemicalSynapseModel<double> SynapseModel;
 
 int main(int argc, char **argv) {
   // Struct to initialize neuron model parameters
@@ -57,15 +57,15 @@ int main(int argc, char **argv) {
   args.params[HH::gl] = 0.3 * 7.854e-3;
 
 
-  Synapsis::ConstructorArgs syn_args;
-  syn_args.params[Synapsis::gfast] = 0.015;
-  syn_args.params[Synapsis::Esyn] = -75;
-  syn_args.params[Synapsis::sfast] = 0.2;
-  syn_args.params[Synapsis::Vfast] = -50;
-  syn_args.params[Synapsis::gslow] = 0.025; //When 0, use only fast
-  syn_args.params[Synapsis::k1] = 1;
-  syn_args.params[Synapsis::k2] = 0.03;
-  syn_args.params[Synapsis::sslow] = 1;
+  Synapse::ConstructorArgs syn_args;
+  syn_args.params[Synapse::gfast] = 0.015;
+  syn_args.params[Synapse::Esyn] = -75;
+  syn_args.params[Synapse::sfast] = 0.2;
+  syn_args.params[Synapse::Vfast] = -50;
+  syn_args.params[Synapse::gslow] = 0.025; //When 0, use only fast
+  syn_args.params[Synapse::k1] = 1;
+  syn_args.params[Synapse::k2] = 0.03;
+  syn_args.params[Synapse::sslow] = 1;
 
 
   // Initialize neuron models
@@ -77,8 +77,8 @@ int main(int argc, char **argv) {
   // Set the integration step
   const double step = 0.01;
 
-  // Initialize a synapsis between the neurons
-  Synapsis s(h1, HH::v, h2, HH::v, syn_args, 1);
+  // Initialize a synapse between the neurons
+  Synapse s(h1, HH::v, h2, HH::v, syn_args, 1);
 
 
   // Perform the simulation
@@ -94,13 +94,13 @@ int main(int argc, char **argv) {
     h1.add_synaptic_input(0.5);
     h2.add_synaptic_input(0.5);
 
-    h2.add_synaptic_input(s.get(Synapsis::i));
+    h2.add_synaptic_input(s.get(Synapse::i));
 
     h1.step(step);
     h2.step(step);
 
     std::cout << time << " " << h1.get(HH::v) << " " << h2.get(HH::v) 
-              << " " << s.get(Synapsis::i)<< " " << s.get(Synapsis::ifast) << " " << s.get(Synapsis::islow)
+              << " " << s.get(Synapse::i)<< " " << s.get(Synapse::ifast) << " " << s.get(Synapse::islow)
               << std::endl;
   }
 

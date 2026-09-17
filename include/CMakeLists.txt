@@ -1,11 +1,11 @@
 install(FILES algorithm.h analysis.h 
 	CurrentPulse.h CurrentSource.h
-	DiffusionSynapsis.h
-	DirectSynapsis.h
-	ElectricalSynapsis.h 
-	GradualActivationSynapsis.h
+	DiffusionSynapse.h
+	DirectSynapse.h
+	ElectricalSynapse.h 
+	GradualActivationSynapse.h
 	ModelBase.h
 	NeuronBase.h  
-	SigmoidalDirectSynapsis.h
-	ChemicalSynapsis.h
+	SigmoidalDirectSynapse.h
+	ChemicalSynapse.h
 	DESTINATION ${PROJECT_NAME}/${PROJECT_VERSION})

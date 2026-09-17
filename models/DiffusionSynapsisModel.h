@@ -31,18 +31,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *************************************************************/
 
-#ifndef DIFFUSIONSYNAPSISMODEL_H_
-#define DIFFUSIONSYNAPSISMODEL_H_
+#ifndef DIFFUSIONSYNAPSEMODEL_H_
+#define DIFFUSIONSYNAPSEMODEL_H_
 
 #ifndef __AVR_ARCH__
 #include <type_traits>
 #endif  //__AVR_ARCH__
 
 /**
- * @brief Implements a synapsis based on (Destexhe et al. 1994)
+ * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
 template <typename precission = double>
-class DiffusionSynapsisModel {
+class DiffusionSynapseModel {
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
 #endif  //__AVR_ARCH__
@@ -66,7 +66,7 @@ class DiffusionSynapsisModel {
   bool m_release;
 
  public:
-  DiffusionSynapsisModel() : m_release(false) {}
+  DiffusionSynapseModel() : m_release(false) {}
 
   void eval(const precission* const vars, const precission* const params,
             precission* const incs) const {
@@ -79,4 +79,4 @@ class DiffusionSynapsisModel {
   }
 };
 
-#endif /*DIFFUSIONSYNAPSISMODEL_H_*/
+#endif /*DIFFUSIONSYNAPSEMODEL_H_*/

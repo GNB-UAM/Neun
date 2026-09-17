@@ -30,11 +30,11 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-$Id: SigmoidalDirectSynapsis.h 184 2007-06-04 11:26:12Z elferdo $
+$Id: SigmoidalDirectSynapse.h 184 2007-06-04 11:26:12Z elferdo $
 *************************************************************/
 
-#ifndef SIGMOIDALDIRECTSYNAPSIS_H_
-#define SIGMOIDALDIRECTSYNAPSIS_H_
+#ifndef SIGMOIDALDIRECTSYNAPSE_H_
+#define SIGMOIDALDIRECTSYNAPSE_H_
 
 #ifndef __AVR_ARCH__
 #include <type_traits>
@@ -44,12 +44,12 @@ $Id: SigmoidalDirectSynapsis.h 184 2007-06-04 11:26:12Z elferdo $
 #endif  //__AVR_ARCH__
 
 /**
- * Implements a sigmoidal synapsis
+ * Implements a sigmoidal synapse
  */
 
 template <typename TNode1, typename TNode2, typename precission = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
-class SigmoidalDirectSynapsis {
+class SigmoidalDirectSynapse {
 #ifndef __AVR_ARCH__
   static_assert(std::is_floating_point<precission>::value);
 #endif  //__AVR_ARCH__
@@ -58,7 +58,7 @@ class SigmoidalDirectSynapsis {
   enum parameter { g, t, sigma, shift, n_parameters };
 
  private:
-  void operator=(SigmoidalDirectSynapsis &s) {}
+  void operator=(SigmoidalDirectSynapse &s) {}
 
   precission m_parameters[n_parameters];
 
@@ -68,7 +68,7 @@ class SigmoidalDirectSynapsis {
   const typename TNode1::variable m_n1_variable;
 
  public:
-  SigmoidalDirectSynapsis(TNode1 const &n1, typename TNode1::variable v,
+  SigmoidalDirectSynapse(TNode1 const &n1, typename TNode1::variable v,
                           TNode2 &n2, precission pg = 1, precission pt = 0,
                           precission psigma = 1, precission pshift = 0)
       : m_n1(n1), m_n2(n2), m_n1_variable(v) {
@@ -78,8 +78,8 @@ class SigmoidalDirectSynapsis {
     m_parameters[shift] = pshift;
   }
 
-  SigmoidalDirectSynapsis(TNode1 const &n1, TNode2 &n2,
-                          SigmoidalDirectSynapsis const &s)
+  SigmoidalDirectSynapse(TNode1 const &n1, TNode2 &n2,
+                          SigmoidalDirectSynapse const &s)
       : m_n1(n1), m_n2(n2), m_n1_variable(s.m_n1_variable) {
     m_parameters[g] = s.m_parameters[g];
     m_parameters[t] = s.m_parameters[t];
@@ -100,4 +100,4 @@ class SigmoidalDirectSynapsis {
   }
 };
 
-#endif /*SIGMOIDALDIRECTSYNAPSIS_H_*/
+#endif /*SIGMOIDALDIRECTSYNAPSE_H_*/

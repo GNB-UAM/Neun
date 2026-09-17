@@ -4,5 +4,5 @@ include_directories(${INCLUDE_DIR} ../concepts ../models ../integrators ../wrapp
 add_executable(basic basic.cpp)
 target_link_libraries(basic)
 
-add_executable(synapsis synapsis.cpp)
-target_link_libraries(synapsis)
+add_executable(synapse synapse.cpp)
+target_link_libraries(synapse)
