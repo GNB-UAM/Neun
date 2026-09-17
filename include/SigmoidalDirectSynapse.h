@@ -47,11 +47,11 @@ $Id: SigmoidalDirectSynapse.h 184 2007-06-04 11:26:12Z elferdo $
  * Implements a sigmoidal synapse
  */
 
-template <typename TNode1, typename TNode2, typename precission = double>
+template <typename TNode1, typename TNode2, typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
 class SigmoidalDirectSynapse {
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
  public:
@@ -60,7 +60,7 @@ class SigmoidalDirectSynapse {
  private:
   void operator=(SigmoidalDirectSynapse &s) {}
 
-  precission m_parameters[n_parameters];
+  precision m_parameters[n_parameters];
 
   TNode1 const &m_n1;
   TNode2 &m_n2;
@@ -69,8 +69,8 @@ class SigmoidalDirectSynapse {
 
  public:
   SigmoidalDirectSynapse(TNode1 const &n1, typename TNode1::variable v,
-                          TNode2 &n2, precission pg = 1, precission pt = 0,
-                          precission psigma = 1, precission pshift = 0)
+                          TNode2 &n2, precision pg = 1, precision pt = 0,
+                          precision psigma = 1, precision pshift = 0)
       : m_n1(n1), m_n2(n2), m_n1_variable(v) {
     m_parameters[g] = pg;
     m_parameters[t] = pt;
@@ -87,12 +87,12 @@ class SigmoidalDirectSynapse {
     m_parameters[shift] = s.m_parameters[shift];
   }
 
-  void step(precission h) {
-    //		const precission value = m_parameters[g] * (m_parameters[shift]
+  void step(precision h) {
+    //		const precision value = m_parameters[g] * (m_parameters[shift]
     //+ tanh(m_parameters[sigma] * m_n1.get_variable(m_n1_variable) -
     // m_parameters[t]));
 
-    const precission value = m_n1.get(m_n1_variable);
+    const precision value = m_n1.get(m_n1_variable);
 
     if (value > m_parameters[t]) {
       m_n2.add_synaptic_input(m_parameters[g]);

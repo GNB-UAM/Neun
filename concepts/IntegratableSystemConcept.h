@@ -43,21 +43,21 @@ $Id: IntegratableSystemConcept.h 184 2007-06-04 11:26:12Z elferdo $
  * A model of this concept must meet the requirements for SystemConcept plus:
  * 
  * The following methods
- * \li void pre_step(precission_t h)
- * \li void post_step(precission_t h)
+ * \li void pre_step(precision_t h)
+ * \li void post_step(precision_t h)
  * 
  * The following static members
- * \li precission_t* m_variables
- * \li precission_t* m_parameters
+ * \li precision_t* m_variables
+ * \li precision_t* m_parameters
  */
 template <typename System>
-concept IntegratableSystemConcept = SystemConcept<System> && requires(System system, typename System::precission_t h) {
+concept IntegratableSystemConcept = SystemConcept<System> && requires(System system, typename System::precision_t h) {
     { system.pre_step(h) };
     { system.post_step(h) };
 	// We should check atributes m_variables and m_parameters are present in System,
 	// but we cannot do it directly in a concept because they are private members.
-    // { System::m_variables } -> std::same_as<typename System::precission_t*>;
-    // { System::m_parameters } -> std::same_as<typename System::precission_t*>;
+    // { System::m_variables } -> std::same_as<typename System::precision_t*>;
+    // { System::m_parameters } -> std::same_as<typename System::precision_t*>;
 };
 
 #endif /*INTEGRATABLESYSTEMCONCEPT_H_*/

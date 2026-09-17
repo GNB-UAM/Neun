@@ -48,16 +48,16 @@ $Id: ElectricalSynapse.h 184 2007-06-04 11:26:12Z elferdo $
  * @param TNode2 Type of the second neuron
  */
 
-template <typename TNode1, typename TNode2, typename precission = double>
+template <typename TNode1, typename TNode2, typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
 class ElectricalSynapse {
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 
  public:
   enum variable { i1, i2, n_variables };
   enum parameter { g1, g2, n_parameters };
 
-  typedef precission precission_t;
+  typedef precision precision_t;
 
  private:
   ElectricalSynapse(ElectricalSynapse &s) {}
@@ -70,8 +70,8 @@ class ElectricalSynapse {
   const typename TNode1::variable m_n1_variable;
   const typename TNode2::variable m_n2_variable;
 
-  precission m_variables[n_variables];
-  precission m_parameters[n_parameters];
+  precision m_variables[n_variables];
+  precision m_parameters[n_parameters];
 
  public:
   /**
@@ -84,14 +84,14 @@ class ElectricalSynapse {
    * @param pg2 Synaptic weight from @c n1 to n2
    */
   ElectricalSynapse(TNode1 &n1, typename TNode1::variable v1, TNode2 &n2,
-                     typename TNode2::variable v2, precission pg1,
-                     precission pg2)
+                     typename TNode2::variable v2, precision pg1,
+                     precision pg2)
       : m_n1(n1), m_n2(n2), m_n1_variable(v1), m_n2_variable(v2) {
     m_parameters[g1] = pg1;
     m_parameters[g2] = pg2;
   }
 
-  void step(precission h) {
+  void step(precision h) {
     m_variables[i1] =
         m_parameters[g1] * (m_n2.get(m_n2_variable) - m_n1.get(m_n1_variable));
     m_variables[i2] =
@@ -101,13 +101,13 @@ class ElectricalSynapse {
     m_n2.add_synaptic_input(m_variables[i2]);
   }
 
-  precission_t get(variable var) const { return m_variables[var]; }
+  precision_t get(variable var) const { return m_variables[var]; }
 
-  void set(variable var, precission_t value) { m_variables[var] = value; }
+  void set(variable var, precision_t value) { m_variables[var] = value; }
 
-  precission_t get(parameter param) const { return m_parameters[param]; }
+  precision_t get(parameter param) const { return m_parameters[param]; }
 
-  void set(parameter param, precission_t value) { m_parameters[param] = value; }
+  void set(parameter param, precision_t value) { m_parameters[param] = value; }
 
   void save(std::ostream &os) {
     for (int i = 0; i < n_variables; i++) {

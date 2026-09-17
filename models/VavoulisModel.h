@@ -38,10 +38,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cmath>
 #include "NeuronBase.h"
 
-template <typename Precission>
-class VavoulisModel : public NeuronBase<Precission> {
+template <typename Precision>
+class VavoulisModel : public NeuronBase<Precision> {
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   // clang-format off
   enum variable { v, va, p, q, h, n, n_variables };
@@ -50,9 +50,9 @@ class VavoulisModel : public NeuronBase<Precission> {
   // clang-format on
 
  protected:
-  Precission il(Precission v) const { return v + 67; }
+  Precision il(Precision v) const { return v + 67; }
 
-  Precission ix(type t, Precission v, Precission p, Precission q) const {
+  Precision ix(type t, Precision v, Precision p, Precision q) const {
     switch (t) {
       case so:
         return 0;
@@ -73,44 +73,44 @@ class VavoulisModel : public NeuronBase<Precission> {
   }
 
   // iecs(v,va,g_ecs) - ieca(va,v,g_eca)
-  Precission iec(Precission v1, Precission v2, Precission g_ec) const {
+  Precision iec(Precision v1, Precision v2, Precision g_ec) const {
     return g_ec * (v1 - v2);
   }
 
-  Precission inat(Precission va, Precission h) const {
-    Precission minf = 1 / (1 + exp((-34.6 - va) / 9.6));
+  Precision inat(Precision va, Precision h) const {
+    Precision minf = 1 / (1 + exp((-34.6 - va) / 9.6));
     return 350 * minf * minf * minf * h * (va - 55);
   }
 
-  Precission ik(Precission va, Precission n) const {
+  Precision ik(Precision va, Precision n) const {
     return 90 * n * n * n * n * (va + 90);
   }
 
-  Precission incr_p(type t, Precission p, Precission v,
-                    Precission tau_p) const {
+  Precision incr_p(type t, Precision p, Precision v,
+                    Precision tau_p) const {
     // switch (t) {
-    Precission pinf = 1 / (1 + exp((-61.6 - v) / 5.6));
+    Precision pinf = 1 / (1 + exp((-61.6 - v) / 5.6));
     return (pinf - p) / tau_p;
   }
 
-  Precission incr_q(type t, Precission q, Precission v,
-                    Precission tau_q) const {
+  Precision incr_q(type t, Precision q, Precision v,
+                    Precision tau_q) const {
     // switch (t) {
-    Precission qinf = 1 / (1 + exp((-73.2 - v) / -5.1));
+    Precision qinf = 1 / (1 + exp((-73.2 - v) / -5.1));
     return (qinf - q) / tau_q;
   }
 
-  Precission incr_h(Precission h, Precission va) const {
-    Precission tau_h =
+  Precision incr_h(Precision h, Precision va) const {
+    Precision tau_h =
         1.1 + 7.2 * exp(-(pow(((-61.3 - va)/22.7),2)));
-    Precission hinf = 1 / (1 + exp((-55.2 - va) / -7.1));
+    Precision hinf = 1 / (1 + exp((-55.2 - va) / -7.1));
     return (hinf - h) / tau_h;
   }
 
-  Precission incr_n(Precission n, Precission va) const {
-    Precission tau_n =
+  Precision incr_n(Precision n, Precision va) const {
+    Precision tau_n =
         1.1 + 4.6 * exp(-(pow(((-61 - va)/54.3),2)));
-    Precission ninf = 1 / (1 + exp((-30 - va) / 17.4));
+    Precision ninf = 1 / (1 + exp((-30 - va) / 17.4));
     return (ninf - n) / tau_n;
   }
 
@@ -120,8 +120,8 @@ class VavoulisModel : public NeuronBase<Precission> {
     std::copy(args.variables, args.variables + n_variables, m_variables);
   }
 
-  void eval(const Precission *const vars, Precission *const params,
-            Precission *const incs) const {
+  void eval(const Precision *const vars, Precision *const params,
+            Precision *const incs) const {
     incs[v] = (-SYNAPTIC_INPUT - il(vars[v]) -
                   ix((type)params[n_type], vars[v], vars[p], vars[q]) -
                   iec(vars[v], vars[va], vars[g_ecs]))/10;

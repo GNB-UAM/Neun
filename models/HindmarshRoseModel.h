@@ -57,10 +57,10 @@ $Id: HindmarshRoseModel.h 203 2007-06-26 14:46:34Z elferdo $
   args.params[Neuron::vh] = 1;
  */
 
-template <typename Precission>
-class HindmarshRoseModel : public NeuronBase<Precission> {
+template <typename Precision>
+class HindmarshRoseModel : public NeuronBase<Precision> {
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { x, y, z, n_variables };
   enum parameter { e, mu, S, a, b, c, d, xr, vh, n_parameters };
@@ -75,12 +75,12 @@ class HindmarshRoseModel : public NeuronBase<Precission> {
 	}
 
  protected:
-  Precission m_variables[n_variables];
-  Precission m_parameters[n_parameters];
+  Precision m_variables[n_variables];
+  Precision m_parameters[n_parameters];
 
  public:
-  void eval(const Precission *const vars, Precission *const params,
-            Precission *const incs) const {
+  void eval(const Precision *const vars, Precision *const params,
+            Precision *const incs) const {
     incs[x] = vars[y] + params[b] * vars[x] * vars[x] -  params[a] * vars[x] * vars[x] * vars[x] -
               vars[z] + params[e] + SYNAPTIC_INPUT;
     incs[y] = params[c] - params[d] * vars[x] * vars[x] - vars[y];

@@ -43,9 +43,9 @@ public:
   template <typename System>
   static void step(
       System& s,
-      typename System::precission_t h,
-      typename System::precission_t* const vars,
-      typename System::precission_t* const params)	{
+      typename System::precision_t h,
+      typename System::precision_t* const vars,
+      typename System::precision_t* const params)	{
     static_assert(SystemConcept<System>, "System must satisfy SystemConcept");
 	}
 };

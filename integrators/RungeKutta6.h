@@ -46,13 +46,13 @@ class RungeKutta6
 {
 public:
 	template <typename TSystem>
-	static void step(TSystem &s, typename TSystem::precission_t h, typename TSystem::precission_t * const variables, typename TSystem::precission_t * const parameters)
+	static void step(TSystem &s, typename TSystem::precision_t h, typename TSystem::precision_t * const variables, typename TSystem::precision_t * const parameters)
 	{
 		using namespace std;
 		
 		static_assert(TSystem::n_variables > 0, "TSystem must have at least one variable");	
 		
-		typedef typename TSystem::precission_t vars_type[TSystem::n_variables];
+		typedef typename TSystem::precision_t vars_type[TSystem::n_variables];
 		
 		vars_type apoyo, retorno;
 		vars_type k[6];

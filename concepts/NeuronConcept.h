@@ -46,15 +46,15 @@ $Id: NeuronConcept.h 184 2007-06-04 11:26:12Z elferdo $
  * A model of this concept must meet the requirements for SystemConcept plus:
  *
  * The following methods
- * \li void add_synaptic_input(precission_t value)
- * \li precission_t get_synaptic_input() const
+ * \li void add_synaptic_input(precision_t value)
+ * \li precision_t get_synaptic_input() const
  * \li void reset_synaptic_input()
  */
 template <typename Neuron>
 concept NeuronConcept = SystemConcept<Neuron> && 
-  requires(Neuron model, const Neuron const_model, typename Neuron::precission_t value) {
+  requires(Neuron model, const Neuron const_model, typename Neuron::precision_t value) {
     { model.add_synaptic_input(value) };
-    { const_model.get_synaptic_input() } -> std::convertible_to<typename Neuron::precission_t>;
+    { const_model.get_synaptic_input() } -> std::convertible_to<typename Neuron::precision_t>;
     { model.reset_synaptic_input() };
     // pre_step and post_step are optional for neurons
     { model.pre_step(value) } -> std::same_as<void>;

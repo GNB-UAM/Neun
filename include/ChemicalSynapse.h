@@ -52,37 +52,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @brief Implements a synapse based on (Golowasch et al. )
  */
 template <typename TNode1, typename TNode2, typename TIntegrator,
-          typename precission = double>
+          typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
     IntegratorConcept<TIntegrator, SerializableWrapper<
-          SystemWrapper<ChemicalSynapseModel<precission> > > >
+          SystemWrapper<ChemicalSynapseModel<precision> > > >
 
 class ChemicalSynapse
     : public SerializableWrapper<
-          SystemWrapper<ChemicalSynapseModel<precission> > > {
+          SystemWrapper<ChemicalSynapseModel<precision> > > {
  private:
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
-  precission m_release_time;
+  precision m_release_time;
 
   TNode1 const &m_n1;
   TNode2 &m_n2;
 
-  precission m_last_value_pre;
+  precision m_last_value_pre;
 
   const typename TNode1::variable m_n1_variable;
   const typename TNode2::variable m_n2_variable;
 
   typedef SerializableWrapper<
-      SystemWrapper<ChemicalSynapseModel<precission> > >
+      SystemWrapper<ChemicalSynapseModel<precision> > >
       System;
 
   const int m_steps;
 
  public:
-  typedef typename System::precission_t precission_t;
+  typedef typename System::precision_t precision_t;
   typedef typename System::variable variable;
   typedef typename System::parameter parameter;
 
@@ -139,12 +139,12 @@ class ChemicalSynapse
         m_steps(synapse.m_steps),
         System(synapse) {}
   
-  // TODO include a constructor without neurons for precission voltage input only
+  // TODO include a constructor without neurons for precision voltage input only
 
-  void step(precission h) {
+  void step(precision h) {
     //Vpre parameter updated from Presynaptic neuron value (must be defined in synapseModel params)
     System::m_parameters[System::v_pre]=m_n1.get(m_n1_variable); 
-    precission v_post = m_n2.get(m_n2_variable);
+    precision v_post = m_n2.get(m_n2_variable);
 
     for (int i = 0; i < m_steps; ++i) {
       TIntegrator::step(*this, h, System::m_variables, System::m_parameters);
@@ -160,11 +160,11 @@ class ChemicalSynapse
     System::m_parameters[System::i] = System::m_parameters[System::ifast]+System::m_parameters[System::islow];
   }
 
-  void step(precission h, precission vpre, precission vpost) {
+  void step(precision h, precision vpre, precision vpost) {
     //Vpre parameter updated from Presynaptic neuron value (must be defined in synapseModel params)
     
     System::m_parameters[System::v_pre]= vpre;
-    precission v_post = vpost;
+    precision v_post = vpost;
 
     for (int i = 0; i < m_steps; ++i) {
       TIntegrator::step(*this, h, System::m_variables, System::m_parameters);

@@ -43,10 +43,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Implements a conductance based synapse with threshold.
  */
 
-template <typename TNode1, typename TNode2, typename precission = double>
+template <typename TNode1, typename TNode2, typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2>
 class DirectSynapse {
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 
  public:
   enum parameter { g, t, n_parameters };
@@ -56,7 +56,7 @@ class DirectSynapse {
 
   void operator=(DirectSynapse &s) {}
 
-  precission m_parameters[n_parameters];
+  precision m_parameters[n_parameters];
 
   TNode1 const &m_n1;
   TNode2 &m_n2;
@@ -65,14 +65,14 @@ class DirectSynapse {
 
  public:
   DirectSynapse(TNode1 const &n1, typename TNode1::variable v, TNode2 &n2,
-                 precission pg = 1, precission pt = 0)
+                 precision pg = 1, precision pt = 0)
       : m_n1(n1), m_n2(n2), m_n1_variable(v) {
     m_parameters[g] = pg;
     m_parameters[t] = pt;
   }
 
-  void step(precission h) {
-    const precission value = m_n1.get_variable(m_n1_variable);
+  void step(precision h) {
+    const precision value = m_n1.get_variable(m_n1_variable);
 
     if (value > m_parameters[DirectSynapse::t]) {
       m_n2.add_synaptic_input(m_parameters[g] * value);

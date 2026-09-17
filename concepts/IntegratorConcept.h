@@ -41,7 +41,7 @@ $Id: IntegratorConcept.h 184 2007-06-04 11:26:12Z elferdo $
 /* * \class IntegratorConcept
   * * A model of this concept must meet the requirements for SystemArchetype plus:
   * * The following static methods
-  * * \li void step(System &s, precission_t h, precission_t * const variables, precission_t * const parameters)
+  * * \li void step(System &s, precision_t h, precision_t * const variables, precision_t * const parameters)
   * * This method must calculate the next state of the system given the current values of the variables and parameters.
   * * The method must be static, so it can be called without an instance of the Integrator.
   * * The method must take a reference to the system, the time step, and pointers to the variables and parameters.
@@ -51,9 +51,9 @@ template <typename Integrator, typename System>
 concept IntegratorConcept = 
     requires(
             System& s, 
-            typename System::precission_t h,
-            typename System::precission_t* const vars, 
-            typename System::precission_t* const params) {
+            typename System::precision_t h,
+            typename System::precision_t* const vars, 
+            typename System::precision_t* const params) {
       Integrator::template step<System>(s, h, vars, params); 
     };
 

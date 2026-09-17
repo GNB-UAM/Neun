@@ -51,35 +51,35 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
 template <typename TNode1, typename TNode2, typename TIntegrator,
-          typename precission = double>
+          typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
     IntegratorConcept<TIntegrator>
 class GradualActivationSynapse
     : public SerializableWrapper<
-          SystemWrapper<GradualActivationSynapseModel<precission> > > {
+          SystemWrapper<GradualActivationSynapseModel<precision> > > {
  private:
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
-  precission m_release_time;
+  precision m_release_time;
 
   TNode1 const &m_n1;
   TNode2 &m_n2;
 
-  precission m_last_value_pre;
+  precision m_last_value_pre;
 
   const typename TNode1::variable m_n1_variable;
   const typename TNode2::variable m_n2_variable;
 
   typedef SerializableWrapper<
-      SystemWrapper<GradualActivationSynapseModel<precission> > >
+      SystemWrapper<GradualActivationSynapseModel<precision> > >
       System;
 
   const int m_steps;
 
  public:
-  typedef typename System::precission_t precission_t;
+  typedef typename System::precision_t precision_t;
   typedef typename System::variable variable;
   typedef typename System::parameter parameter;
 
@@ -133,7 +133,7 @@ class GradualActivationSynapse
         m_steps(synapse.m_steps),
         System(synapse) {}
 
-  void step(precission h) {
+  void step(precision h) {
     //Vpre parameter updated from Presynaptic neuron value.
     System::m_parameters[System::v_pre]=m_n1.get(m_n1_variable); 
 

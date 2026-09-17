@@ -39,7 +39,7 @@ $Id: IntegratedSystemArchetype.h 184 2007-06-04 11:26:12Z elferdo $
 #include "IntegratorArchetype.h"
 #include "IntegratedSystemWrapper.h"
 
-template <typename Precission>
-using IntegratedSystemArchetype = IntegratedSystemWrapper<SystemArchetype<Precission>, IntegratorArchetype>;
+template <typename Precision>
+using IntegratedSystemArchetype = IntegratedSystemWrapper<SystemArchetype<Precision>, IntegratorArchetype>;
 
 #endif /*INTEGRATEDSYSTEMARCHETYPE_H_*/

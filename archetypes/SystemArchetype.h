@@ -38,7 +38,7 @@ $Id: SystemArchetype.h 184 2007-06-04 11:26:12Z elferdo $
 #include "ModelArchetype.h"
 #include "SystemWrapper.h"
 
-template <typename Precission>
-using SystemArchetype = SystemWrapper<ModelArchetype<Precission>>;
+template <typename Precision>
+using SystemArchetype = SystemWrapper<ModelArchetype<Precision>>;
 
 #endif /*SYSTEMARCHETYPE_H_*/

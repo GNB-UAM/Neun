@@ -42,13 +42,13 @@ class Euler
 {
 public:
 	template <typename TSystem>
-	static void step(TSystem &s, typename TSystem::precission_t h, typename TSystem::precission_t * const variables, typename TSystem::precission_t * const parameters)
+	static void step(TSystem &s, typename TSystem::precision_t h, typename TSystem::precision_t * const variables, typename TSystem::precision_t * const parameters)
 	{
 		using namespace std;
 
 		static_assert(SystemConcept<TSystem>, "TSystem must satisfy SystemConcept");
 
-		typename TSystem::precission_t results[TSystem::n_variables];
+		typename TSystem::precision_t results[TSystem::n_variables];
 
 		const int dim = TSystem::n_variables;
 

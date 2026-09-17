@@ -41,12 +41,12 @@ $Id: TimeWrapper.h 337 2008-01-29 15:46:19Z elferdo $
 template <typename IntegratedSystem>
 concept TimeWrapperConcept = IntegratedSystemConcept<IntegratedSystem> 
 	&& requires(IntegratedSystem system, int substeps_per_cycle) {
-	{ system.step(std::declval<typename IntegratedSystem::precission_t>()) };
+	{ system.step(std::declval<typename IntegratedSystem::precision_t>()) };
 	{ IntegratedSystem(system, substeps_per_cycle) };
 };
 class TimeWrapper : public IntegratedSystem
 {	
-	typedef typename IntegratedSystem::precission_t precission;
+	typedef typename IntegratedSystem::precision_t precision;
 	
 	int m_substeps_per_cycle;
 	
@@ -62,7 +62,7 @@ public:
 	{
 	}
 	
-	void step(precission h)
+	void step(precision h)
 	{
 		for(int i = 0; i < m_substeps_per_cycle; i++){
 			m_system.step(h);

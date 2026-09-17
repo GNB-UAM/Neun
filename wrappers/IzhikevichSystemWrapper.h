@@ -4,18 +4,18 @@
 #include "SystemWrapper.h"
 #include "IzhikevichModel.h"
 
-template <typename Precission>
-class IzhikevichSystemWrapper : public SystemWrapper<IzhikevichModel<Precission>> {
+template <typename Precision>
+class IzhikevichSystemWrapper : public SystemWrapper<IzhikevichModel<Precision>> {
 public:
-    using Base = SystemWrapper<IzhikevichModel<Precission>>;
-    using typename Base::precission_t;
+    using Base = SystemWrapper<IzhikevichModel<Precision>>;
+    using typename Base::precision_t;
     using typename Base::variable;
     using typename Base::parameter;
 
-    void pre_step(precission_t /*h*/) {
+    void pre_step(precision_t /*h*/) {
     }
 
-    void post_step(precission_t /*h*/) {
+    void post_step(precision_t /*h*/) {
         // Izhikevich reset logic: if v >= threshold, reset v and update u
         if (this->get(variable::v) >= this->get(parameter::threshold)) {
             this->set(variable::v, this->get(parameter::c));

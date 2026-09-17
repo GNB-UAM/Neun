@@ -48,18 +48,18 @@ $Id: SystemConcept.h 184 2007-06-04 11:26:12Z elferdo $
  * The following types
  * \li variable
  * \li parameter
- * \li precission_t
+ * \li precision_t
  *
  * The following integers
  * \li n_variables
  * \li n_parameters
  *
  * And the following methods
- * \li precission_t get(variable) const
- * \li precission_t get(parameter) const
- * \li void set(variable, precission_t)
- * \li void set(parameter, precission_t)
- * \li void step(precission_t)
+ * \li precision_t get(variable) const
+ * \li precision_t get(parameter) const
+ * \li void set(variable, precision_t)
+ * \li void set(parameter, precision_t)
+ * \li void step(precision_t)
  */
 template <typename Wrapee>
 concept SystemConcept = ModelConcept<Wrapee> && requires(
@@ -67,10 +67,10 @@ concept SystemConcept = ModelConcept<Wrapee> && requires(
   const Wrapee const_wrapee,
   typename Wrapee::variable v,
   typename Wrapee::parameter p,
-  typename Wrapee::precission_t value
+  typename Wrapee::precision_t value
 ) {
-  { const_wrapee.get(v) } -> std::convertible_to<typename Wrapee::precission_t>;
-  { const_wrapee.get(p) } -> std::convertible_to<typename Wrapee::precission_t>;
+  { const_wrapee.get(v) } -> std::convertible_to<typename Wrapee::precision_t>;
+  { const_wrapee.get(p) } -> std::convertible_to<typename Wrapee::precision_t>;
   { wrapee.set(v, value) };
   { wrapee.set(p, value) };
   { Wrapee::n_variables } -> std::convertible_to<int>;

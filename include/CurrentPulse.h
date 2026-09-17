@@ -42,35 +42,35 @@ $Id: CurrentPulse.h 184 2007-06-04 11:26:12Z elferdo $
 
 /* @brief implements a current pulse that can be used to stimulate a neuron.
 */
-template <typename Neuron, typename precission = double>
+template <typename Neuron, typename precision = double>
 requires NeuronConcept<Neuron>
 class CurrentPulse {
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 
  public:
   enum variable { i, n_variables };
 
  private:
-  precission m_variables[n_variables];
+  precision m_variables[n_variables];
 
-  precission m_local_time;
+  precision m_local_time;
 
-  const precission m_activation_time;
-  const precission m_length;
-  const precission m_amplitude;
+  const precision m_activation_time;
+  const precision m_length;
+  const precision m_amplitude;
 
   Neuron &m_neuron;
 
  public:
-  CurrentPulse(Neuron &neuron, precission activation_time, precission length,
-               precission amplitude)
+  CurrentPulse(Neuron &neuron, precision activation_time, precision length,
+               precision amplitude)
       : m_neuron(neuron),
         m_activation_time(activation_time),
         m_length(length),
         m_amplitude(amplitude),
         m_local_time(0) {}
 
-  void step(precission h) {
+  void step(precision h) {
     m_local_time += h;
 
     if ((m_activation_time < m_local_time) &&
@@ -83,9 +83,9 @@ class CurrentPulse {
     }
   }
 
-  precission get_variable(variable var) const { return m_variables[var]; }
+  precision get_variable(variable var) const { return m_variables[var]; }
 
-  void set_variable(variable var, precission value) {
+  void set_variable(variable var, precision value) {
     m_variables[var] = value;
   }
 };

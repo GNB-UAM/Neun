@@ -43,7 +43,7 @@ $Id: DifferentialDynamicalSystemConcept.h,v 1.1.2.2 2006/11/28 17:10:04 elferdo 
  * \class DifferentialDynamicalSystemConcept
  * A model of this concept must meet the requirements for DynamicalSystemConcept plus:
  * The following method
- * \li void eval(precission_t * const variables, precission_t * const increments)
+ * \li void eval(precision_t * const variables, precision_t * const increments)
  * This method must calculate the increments of the variables of the system
  * given the current values of the variables.
  * The increments must be stored in the increments array.
@@ -53,7 +53,7 @@ concept DifferentialDynamicalSystemConcept =
     requires(
         DynamicalSystem system,
         Integrator integrator,
-        typename DynamicalSystem::precission_t h
+        typename DynamicalSystem::precision_t h
     ) {
         { system.step(h) };
     } && DynamicalSystemConcept<DynamicalSystem>

@@ -45,17 +45,17 @@ $Id: RulkovMapModel.h 184 2007-06-04 11:26:12Z elferdo $
  * betae = 1
  * sigmae = 1
  */
-template <typename Precission>
-class BistableRulkovMapModel : public NeuronBase<Precission>{
+template <typename Precision>
+class BistableRulkovMapModel : public NeuronBase<Precision>{
 public:
-	typedef Precission precission_t;
+	typedef Precision precision_t;
 	
 	enum variable {x, y, sigma, n_variables};
 	enum parameter {alpha, mu, sigmae, betae, point, n_parameters};
 
 protected:
 
-	Precission f(Precission _alpha, Precission x, Precission y) const
+	Precision f(Precision _alpha, Precision x, Precision y) const
 	{
 		if(x <= 0){
 			return _alpha / (1 - x) + y;
@@ -69,7 +69,7 @@ protected:
 	}
 	
 public:
-	void eval(const Precission * const vars, Precission * const params, Precission * const incs) const
+	void eval(const Precision * const vars, Precision * const params, Precision * const incs) const
 	{
 		incs[x] = f(params[alpha], vars[x], vars[y] + params[betae] * SYNAPTIC_INPUT);
 		incs[y] = vars[y] + params[mu] * (-(vars[x] + 1) + vars[sigma] + params[sigmae] * SYNAPTIC_INPUT);

@@ -45,7 +45,7 @@ class SerializableWrapper : public System{
 
 public:
 
-	typedef typename System::precission_t precission_t;
+	typedef typename System::precision_t precision_t;
 	typedef typename System::variable variable;
 	typedef typename System::parameter parameter;
 	typedef typename System::ConstructorArgs ConstructorArgs;

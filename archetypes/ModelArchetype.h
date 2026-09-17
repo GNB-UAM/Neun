@@ -37,7 +37,7 @@ $Id: ModelArchetype.h 184 2007-06-04 11:26:12Z elferdo $
 
 #include "ModelBase.h"
 
-template <typename Precission>
-using ModelArchetype = ModelBase<Precission>;
+template <typename Precision>
+using ModelArchetype = ModelBase<Precision>;
 
 #endif /*MODELARCHETYPE_H_*/

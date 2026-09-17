@@ -47,16 +47,16 @@ $Id: MatsuokaModel.h 443 2010-03-04 01:17:25Z elferdo $
  * c = 1
  */
 
-template <typename Precission>
-class MatsuokaModel : public NeuronBase<Precission> {
+template <typename Precision>
+class MatsuokaModel : public NeuronBase<Precision> {
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { x, v, n_variables };
   enum parameter { beta, t1, t2, c, n_parameters };
 
-  void eval(const Precission* const vars, Precission* const params,
-            Precission* const incs) const {
+  void eval(const Precision* const vars, Precision* const params,
+            Precision* const incs) const {
     incs[x] = (-vars[x] - params[beta] * vars[v] + SYNAPTIC_INPUT + params[c]) /
               params[t1];
     incs[v] = (-vars[v] + ((vars[x] > 0) ? vars[x] : 0)) / params[t2];

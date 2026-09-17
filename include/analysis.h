@@ -36,10 +36,10 @@ $Id: analysis.h 184 2007-06-04 11:26:12Z elferdo $
 #define ANALYSIS_H_
 
 template <typename TNeuron>
-void advance_until_crossing_threshold(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precission_t h, typename TNeuron::precission_t threshold)
+void advance_until_crossing_threshold(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precision_t h, typename TNeuron::precision_t threshold)
 {
-	typename TNeuron::precission_t lastx = 0;
-	typename TNeuron::precission_t x = 0;
+	typename TNeuron::precision_t lastx = 0;
+	typename TNeuron::precision_t x = 0;
 	
 	do{
 		n.step(h);
@@ -51,10 +51,10 @@ void advance_until_crossing_threshold(TNeuron &n, typename TNeuron::variable v, 
 }
 
 template <typename TNeuron>
-void advance_until_crossing_threshold_adding_input(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precission_t h, typename TNeuron::precission_t input, typename TNeuron::precission_t threshold)
+void advance_until_crossing_threshold_adding_input(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precision_t h, typename TNeuron::precision_t input, typename TNeuron::precision_t threshold)
 {
-	typename TNeuron::precission_t lastx = 0;
-	typename TNeuron::precission_t x = 0;
+	typename TNeuron::precision_t lastx = 0;
+	typename TNeuron::precision_t x = 0;
 	
 	do{
 		n.add_synaptic_input(input);
@@ -68,10 +68,10 @@ void advance_until_crossing_threshold_adding_input(TNeuron &n, typename TNeuron:
 }
 
 template <typename TNeuron>
-unsigned int get_period(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precission_t h, typename TNeuron::precission_t threshold)
+unsigned int get_period(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precision_t h, typename TNeuron::precision_t threshold)
 {
-	typename TNeuron::precission_t lastx;
-	typename TNeuron::precission_t x;
+	typename TNeuron::precision_t lastx;
+	typename TNeuron::precision_t x;
 	
 	unsigned int period = 0;
 	 
@@ -88,10 +88,10 @@ unsigned int get_period(TNeuron &n, typename TNeuron::variable v, typename TNeur
 }
 
 template <typename TNeuron>
-unsigned int get_period_adding_input(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precission_t h, typename TNeuron::precission_t input, typename TNeuron::precission_t threshold)
+unsigned int get_period_adding_input(TNeuron &n, typename TNeuron::variable v, typename TNeuron::precision_t h, typename TNeuron::precision_t input, typename TNeuron::precision_t threshold)
 {
-	typename TNeuron::precission_t lastx;
-	typename TNeuron::precission_t x;
+	typename TNeuron::precision_t lastx;
+	typename TNeuron::precision_t x;
 	
 	unsigned int period = 0;
 	 

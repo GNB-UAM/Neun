@@ -39,7 +39,7 @@ $Id: DifferentialDynamicalSystemArchetype.h,v 1.1.2.2 2006/11/28 17:10:04 elferd
 #include "DifferentialNeuronWrapper.h"
 #include "IntegratorArchetype.h"
 
-template <typename Precission>
-using DifferentialNeuronArchetype = DifferentialNeuronWrapper<NeuronArchetype<Precission>, IntegratorArchetype>;
+template <typename Precision>
+using DifferentialNeuronArchetype = DifferentialNeuronWrapper<NeuronArchetype<Precision>, IntegratorArchetype>;
 
 #endif /*DIFFERENTIALNEURONARCHETYPE_H_*/

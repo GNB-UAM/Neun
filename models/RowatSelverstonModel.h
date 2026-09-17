@@ -46,18 +46,18 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * af = 1
  * es = 1
  */
-template <typename Precission>
+template <typename Precision>
 class RowatSelverstonModel {
-  static_assert(std::is_floating_point<Precission>::value);
+  static_assert(std::is_floating_point<Precision>::value);
 
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { v = 0, q = 1, n_variables };
   enum parameter { tm, sf, ts, ss, af, es, n_parameters };
 
  public:
-  void eval(const Precission *const vars, Precission *const incs) const {
+  void eval(const Precision *const vars, Precision *const incs) const {
     incs[v] = -(vars[v] -
                 m_parameters[af] *
                     tanh((m_parameters[sf] / m_parameters[af]) * vars[v]) +

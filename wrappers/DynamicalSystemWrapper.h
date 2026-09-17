@@ -47,7 +47,7 @@ template <typename Wrapee>
 requires SystemConcept<Wrapee>
 class DynamicalSystemWrapper : public Wrapee {
  public:
-  typedef typename Wrapee::precission_t precission_t;
+  typedef typename Wrapee::precision_t precision_t;
   typedef typename Wrapee::variable variable;
   typedef typename Wrapee::parameter parameter;
   typedef typename Wrapee::ConstructorArgs ConstructorArgs;
@@ -56,17 +56,17 @@ class DynamicalSystemWrapper : public Wrapee {
 
   DynamicalSystemWrapper(ConstructorArgs &args) : Wrapee(args) {}
 
-  precission_t get(variable var) const { return Wrapee::m_variables[var]; }
+  precision_t get(variable var) const { return Wrapee::m_variables[var]; }
 
-  void set(variable var, precission_t value) {
+  void set(variable var, precision_t value) {
     Wrapee::m_variables[var] = value;
   }
 
-  precission_t get(parameter param) const {
+  precision_t get(parameter param) const {
     return Wrapee::m_parameters[param];
   }
 
-  void set(parameter param, precission_t value) {
+  void set(parameter param, precision_t value) {
     Wrapee::m_parameters[param] = value;
   }
 };

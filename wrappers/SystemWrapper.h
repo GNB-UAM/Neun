@@ -57,18 +57,18 @@ class SystemWrapper : public Model
 
 protected:
 
-	typename Model::precission_t m_variables[Model::n_variables];
-	typename Model::precission_t m_parameters[Model::n_parameters];
+	typename Model::precision_t m_variables[Model::n_variables];
+	typename Model::precision_t m_parameters[Model::n_parameters];
 
 public:
 
-	typedef typename Model::precission_t precission_t;
+	typedef typename Model::precision_t precision_t;
 	typedef typename Model::variable variable;
 	typedef typename Model::parameter parameter;
 	
 	struct ConstructorArgs
 	{
-		precission_t params[Model::n_parameters];
+		precision_t params[Model::n_parameters];
 	};
 
 	SystemWrapper(ConstructorArgs const &args) : Model()
@@ -87,22 +87,22 @@ public:
 	  std::copy(system.m_variables, system.m_variables + Model::n_variables, m_variables);
 	}
 
-	precission_t get(variable var) const
+	precision_t get(variable var) const
 	{
 		return m_variables[var];
 	}
 
-	void set(variable var, precission_t value)
+	void set(variable var, precision_t value)
 	{
 		m_variables[var] = value;
 	}
 
-	precission_t get(parameter param) const
+	precision_t get(parameter param) const
 	{
 		return m_parameters[param];
 	}
 
-	void set(parameter param, precission_t value)
+	void set(parameter param, precision_t value)
 	{
 		m_parameters[param] = value;
 	}

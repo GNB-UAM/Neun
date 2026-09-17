@@ -42,30 +42,30 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ModelBase.h"
 
 // Define a macro for the synaptic input to be used in models
-// SYNAPTIC_INPUT expands to NeuronBase<Precission>::m_synaptic_input
-#define SYNAPTIC_INPUT NeuronBase<Precission>::m_synaptic_input
+// SYNAPTIC_INPUT expands to NeuronBase<Precision>::m_synaptic_input
+#define SYNAPTIC_INPUT NeuronBase<Precision>::m_synaptic_input
 
-template <typename Precission>
-class NeuronBase : public ModelBase<Precission> {
-  static_assert(std::is_floating_point<Precission>::value);
+template <typename Precision>
+class NeuronBase : public ModelBase<Precision> {
+  static_assert(std::is_floating_point<Precision>::value);
 
  protected:
-  Precission m_synaptic_input;
+  Precision m_synaptic_input;
 
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
   
   NeuronBase() : m_synaptic_input(0) {}
 
-  void add_synaptic_input(precission_t i) { m_synaptic_input += i; }
+  void add_synaptic_input(precision_t i) { m_synaptic_input += i; }
 
-  precission_t get_synaptic_input() const { return m_synaptic_input; }
+  precision_t get_synaptic_input() const { return m_synaptic_input; }
 
   void reset_synaptic_input() { m_synaptic_input = 0; }
 
-  void pre_step(precission_t h) {}
+  void pre_step(precision_t h) {}
 
-  void post_step(precission_t h) { reset_synaptic_input(); }
+  void post_step(precision_t h) { reset_synaptic_input(); }
 };
 
 #endif /*NEURONBASE_H_*/

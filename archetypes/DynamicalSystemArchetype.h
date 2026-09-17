@@ -38,7 +38,7 @@ $Id: DynamicalSystemArchetype.h,v 1.1.2.2 2006/11/28 17:10:04 elferdo Exp $
 #include "SystemArchetype.h"
 #include "DynamicalSystemWrapper.h"
 
-template <typename Precission>
-using DynamicalSystemArchetype = DynamicalSystemWrapper<SystemArchetype<Precission>>;
+template <typename Precision>
+using DynamicalSystemArchetype = DynamicalSystemWrapper<SystemArchetype<Precision>>;
 
 #endif /*DYNAMICALSYSTEMARCHETYPE_H_*/

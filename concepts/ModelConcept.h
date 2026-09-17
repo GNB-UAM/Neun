@@ -44,21 +44,21 @@ $Id: ModelConcept.h 443 2010-03-04 01:17:25Z elferdo $
  * A model of this concept must define:
  *
  * The following types
- * \li precission_t
+ * \li precision_t
  * \li variable
  * \li parameter
  *
  * The following methods
- * \li void eval(precission_t [n_variables], precission_t [n_parameters], precission_t [n_variables]) const
+ * \li void eval(precision_t [n_variables], precision_t [n_parameters], precision_t [n_variables]) const
  * The following static members
  * \li int n_variables
  * \li int n_parameters
  * The following static methods
- * \li void step(Model &model, precission_t h, precission_t * const variables, precission_t * const parameters)
+ * \li void step(Model &model, precision_t h, precision_t * const variables, precision_t * const parameters)
  **/
 template <typename Model>
-concept ModelConcept = requires(Model model, typename Model::precission_t* vars, typename Model::precission_t* params, typename Model::precission_t* incs) {
-    requires std::is_arithmetic_v<typename Model::precission_t>;
+concept ModelConcept = requires(Model model, typename Model::precision_t* vars, typename Model::precision_t* params, typename Model::precision_t* incs) {
+    requires std::is_arithmetic_v<typename Model::precision_t>;
     { Model::n_variables } -> std::convertible_to<int>;
     { Model::n_parameters } -> std::convertible_to<int>;
     { model.eval(vars, params, incs) };

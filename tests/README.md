@@ -112,7 +112,7 @@ If you see compilation errors in tests:
 2. Check which concept requirement is not satisfied
 3. Verify the archetype or concept definition
 4. Ensure all required members are public
-5. Check type consistency (e.g., `precission_t` matches)
+5. Check type consistency (e.g., `precision_t` matches)
 
 ## Contributing
 

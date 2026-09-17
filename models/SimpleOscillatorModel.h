@@ -40,19 +40,19 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 /**
  */
-template <typename Precission>
+template <typename Precision>
 class SimpleOscillatorModel {
-  static_assert(std::is_floating_point<Precission>::value);
+  static_assert(std::is_floating_point<Precision>::value);
 
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { x, y, n_variables };
   enum parameter { a, m, x0, A, n_parameters };
 
  public:
 
-  void eval(const Precission *const vars, Precission *const incs) const {
+  void eval(const Precision *const vars, Precision *const incs) const {
     incs[x] = m_parameters[A] * pow(vars[x] - m_parameters[a], 2) * vars[x] -
               vars[y] + SYNAPTIC_INPUT;
     incs[y] = m_parameters[m] * (vars[x] - m_parameters[x0]);

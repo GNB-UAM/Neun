@@ -44,17 +44,17 @@ $Id: HindmarshRoseModel.h 203 2007-06-26 14:46:34Z elferdo $
  * (Izhikevich, 2006)
  */
 
-template <typename Precission>
-class IzhikevichModel : public NeuronBase<Precission> {
+template <typename Precision>
+class IzhikevichModel : public NeuronBase<Precision> {
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { v, u, n_variables };
   enum parameter { a, b, c, d, threshold, n_parameters };
 
  public:
-  void eval(const Precission *const vars, Precission *const params,
-            Precission *const incs) const {
+  void eval(const Precision *const vars, Precision *const params,
+            Precision *const incs) const {
     incs[v] =
         0.04 * vars[v] * vars[v] + 5 * vars[v] + 140 - vars[u] + SYNAPTIC_INPUT;
     // incs[v] = v + 0.5*(0.04 * vars[v] * vars[v] + 5 * vars[v] + 140 - vars[u]
@@ -63,7 +63,7 @@ class IzhikevichModel : public NeuronBase<Precission> {
     incs[u] = params[a] * (params[b] * vars[v] - vars[u]);
   }
 
-  void post_step(Precission h) {
+  void post_step(Precision h) {
     if (this->get(v) >= this->get(threshold)) {
       this->set(v, this->get(c));
       this->set(u, this->get(u) + this->get(d));

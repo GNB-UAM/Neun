@@ -44,10 +44,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @brief Implements a synapse based on  (Golowasch et al., 1999 )
  */
-template <typename precission = double>
+template <typename precision = double>
 class ChemicalSynapseModel {
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
  public:
@@ -89,13 +89,13 @@ class ChemicalSynapseModel {
               };
     }
 
-  typedef precission precission_t;
+  typedef precision precision_t;
 
  public:
   ChemicalSynapseModel() {}
 
-  void eval(const precission* const vars, const precission* const params,
-            precission* const incs) const {
+  void eval(const precision* const vars, const precision* const params,
+            precision* const incs) const {
       incs[mslow] = ((params[k1] * (1 - vars[mslow])) / (1 + exp(params[sslow] * (params[Vslow] - params[v_pre])))) - params[k2] * vars[mslow];
   }
 };

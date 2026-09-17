@@ -76,8 +76,8 @@ void write_headers(char * modelname) {
     printf( "#include <cmath>\n");
     printf( "#include \"NeuronBase.h\"\n\n");
 
-    printf( "template <typename Precission>\n");
-    printf( "class %sModel : public NeuronBase<Precission>\n", modelname);
+    printf( "template <typename Precision>\n");
+    printf( "class %sModel : public NeuronBase<Precision>\n", modelname);
     printf( "{\n");
 }
 
@@ -85,7 +85,7 @@ void write_vars()
 {
 
     printf( "public:\n");
-    printf( "    typedef Precission precission_t;\n\n");
+    printf( "    typedef Precision precision_t;\n\n");
 
     printf( "    enum variable {");
     for (int i=0; i < n_variables; i++)
@@ -116,7 +116,7 @@ void write_protected(){
 
     // Generate the function for each equation
     for (int i = 0; i < eq_count; i++) {
-        printf("    Precission %s(Precission v) const\n{\n", strtolower(equations[i].variable));
+        printf("    Precision %s(Precision v) const\n{\n", strtolower(equations[i].variable));
         printf("        return %s;\n", strtolower(equations[i].equation));
         printf("    }\n\n");
     }
@@ -130,14 +130,14 @@ void write_constructor(){
 
     printf("    struct ConstructorArgs\n{\n");
         
-    printf("    Precission params[n_parameters];\n};\n");
+    printf("    Precision params[n_parameters];\n};\n");
     printf("     %sModel(ConstructorArgs const &args)\n{", modelname);
     printf("        std::copy(args.params, args.params + n_parameters, m_parameters);\n}\n");
 
 }
 void write_eval(){
     
-    printf("    void eval(const Precission * const vars, Precission * const params, Precission * const incs) const\n{");
+    printf("    void eval(const Precision * const vars, Precision * const params, Precision * const incs) const\n{");
 	
     for (int i = 0; i < eq_count; i++) {
         printf("        incs[%s] = %s\n", equations[i].variable, equations[i].equation);

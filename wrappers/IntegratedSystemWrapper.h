@@ -54,7 +54,7 @@ requires IntegratableSystemConcept<Wrapee> && IntegratorConcept<Integrator, Wrap
 class IntegratedSystemWrapper : public DynamicalSystemWrapper<Wrapee> {
 
  public:
-  typedef typename Wrapee::precission_t precission_t;
+  typedef typename Wrapee::precision_t precision_t;
   typedef typename Wrapee::variable variable;
   typedef typename Wrapee::parameter parameter;
   typedef typename Wrapee::ConstructorArgs ConstructorArgs;
@@ -67,7 +67,7 @@ class IntegratedSystemWrapper : public DynamicalSystemWrapper<Wrapee> {
 
   void restart() { Wrapee::restart(); }
 
-  void step(precission_t h) {
+  void step(precision_t h) {
     /* Allow system specific step actions */
 
     Wrapee::pre_step(h);
@@ -78,9 +78,9 @@ class IntegratedSystemWrapper : public DynamicalSystemWrapper<Wrapee> {
     Wrapee::post_step(h);
   }
 
-  void add_synaptic_input(precission_t i) { Wrapee::m_synaptic_input += i; }
+  void add_synaptic_input(precision_t i) { Wrapee::m_synaptic_input += i; }
 
-  precission_t get_synaptic_input() const { return Wrapee::m_synaptic_input; }
+  precision_t get_synaptic_input() const { return Wrapee::m_synaptic_input; }
 };
 
 #endif /*INTEGRATEDSYSTEMWRAPPER_H_*/

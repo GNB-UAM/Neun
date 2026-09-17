@@ -50,11 +50,11 @@ $Id: VavoulisCGCModelQ10.h 184 2007-06-04 11:26:12Z elferdo $
  * gl = 0.3 * 7.854e-3
  */
 
-template <typename Precission>
-class VavoulisCGCModelQ10 : public NeuronBase<Precission>
+template <typename Precision>
+class VavoulisCGCModelQ10 : public NeuronBase<Precision>
 {
 public:
-	typedef Precission precission_t;
+	typedef Precision precision_t;
 
 	enum variable {v, h, r, a, b, n, e, f, n_variables};
 	enum parameter {t_scale, diff_T, cm, gamma_T,
@@ -100,55 +100,55 @@ public:
 	}
 protected:
 
-	Precission x_inf(Precission v, Precission vh, Precission vs) const
+	Precision x_inf(Precision v, Precision vh, Precision vs) const
 	{
 		return 1 / (1 + exp((vh - v) / vs));
 	}
 
-	Precission incr_x(Precission phi_q10, Precission x, Precission v, Precission vh, Precission vs, Precission tau0, Precission delta) const
+	Precision incr_x(Precision phi_q10, Precision x, Precision v, Precision vh, Precision vs, Precision tau0, Precision delta) const
 	{
-		Precission xinf = x_inf(v,vh,vs);
+		Precision xinf = x_inf(v,vh,vs);
 
-		Precission taux = tau0 * exp(delta * (vh - v) / vs) * xinf;
+		Precision taux = tau0 * exp(delta * (vh - v) / vs) * xinf;
 
 		return phi_q10 * (xinf - x) / taux;
 	}
 
 
 	//Sodium
-	Precission inat(Precission v, Precission h, Precission gnat, Precission vna,
-					 Precission vh_m, Precission vs_m) const {
-		Precission minf = x_inf(v, vh_m, vs_m);
+	Precision inat(Precision v, Precision h, Precision gnat, Precision vna,
+					 Precision vh_m, Precision vs_m) const {
+		Precision minf = x_inf(v, vh_m, vs_m);
 		return gnat * pow(minf,3) * h * (v - vna);
 	}
 
-	Precission inap(Precission v, Precission r, Precission gnap, Precission vna) const {
+	Precision inap(Precision v, Precision r, Precision gnap, Precision vna) const {
 		return gnap * pow(r,3) * (v - vna);
 	}
 
 	//Potassium
-	Precission ia(Precission v, Precission a, Precission b, Precission ga, Precission vk) const {
+	Precision ia(Precision v, Precision a, Precision b, Precision ga, Precision vk) const {
 		return ga * pow(a,4) * b * (v - vk);
 	}
 
-	Precission id(Precission v, Precission n, Precission gd, Precission vk) const {
+	Precision id(Precision v, Precision n, Precision gd, Precision vk) const {
 		return gd * pow(n,4) * (v - vk);
 	}
 
 	//Calcium
-	Precission ilva(Precission v, Precission glva, Precission vca, 
-					Precission vh_c, Precission vs_c, Precission vh_d, Precission vs_d) const {
+	Precision ilva(Precision v, Precision glva, Precision vca, 
+					Precision vh_c, Precision vs_c, Precision vh_d, Precision vs_d) const {
 
-		Precission cinf = x_inf(v,vh_c,vs_c);
-		Precission dinf = x_inf(v,vh_d,vs_d);
+		Precision cinf = x_inf(v,vh_c,vs_c);
+		Precision dinf = x_inf(v,vh_d,vs_d);
 		return glva * pow(cinf,3) * dinf * (v - vca);
 	}
 
-	Precission ihva(Precission v, Precission e, Precission f, Precission ghva, Precission vca) const {
+	Precision ihva(Precision v, Precision e, Precision f, Precision ghva, Precision vca) const {
 		return ghva * pow(e,3) * f *(v - vca);
 	}
 
-	Precission g_q10(Precission q10, Precission g, Precission diff_T) const
+	Precision g_q10(Precision q10, Precision g, Precision diff_T) const
 	{
 		if (q10 > 0)
 			return g * pow(q10,diff_T/10);
@@ -156,7 +156,7 @@ protected:
 			return 1 * g;
 	}
 
-	Precission phi_q10(Precission q10, Precission diff_T) const
+	Precision phi_q10(Precision q10, Precision diff_T) const
 	{
 		if (q10 > 0)
 			return pow(q10,diff_T/10);
@@ -164,7 +164,7 @@ protected:
 			return 1;
 	}
 
-	Precission c_q10(Precission cm, Precission gamma_T, Precission diff_T) const
+	Precision c_q10(Precision cm, Precision gamma_T, Precision diff_T) const
 	{
 		return cm + cm * gamma_T * diff_T;
 	}
@@ -178,7 +178,7 @@ public:
     std::copy(args.params, args.params + n_parameters, m_parameters);
   }
 
-	void eval(const Precission * const vars, Precission * const params, Precission * const incs) const
+	void eval(const Precision * const vars, Precision * const params, Precision * const incs) const
 	{
 		incs[h]= params[t_scale] * incr_x(phi_q10(params[Q10_h], params[diff_T]),
 					 vars[h], vars[v], params[vh_h], params[vs_h],

@@ -51,8 +51,8 @@ $Id$
 template <typename Wrapee, typename Integrator>
 requires DynamicalSystemConcept<Wrapee>
 class DifferentialDynamicalSystemWrapper : public DynamicalSystemWrapper<Wrapee> {
-  static_assert(std::is_floating_point<typename Wrapee::precission_t>::value,
-                "Wrapee must have a floating point precission_t type");
+  static_assert(std::is_floating_point<typename Wrapee::precision_t>::value,
+                "Wrapee must have a floating point precision_t type");
 
   static_assert(DynamicalSystemConcept<Wrapee>, "Wrapee must satisfy DynamicalSystemConcept");
 
@@ -60,7 +60,7 @@ class DifferentialDynamicalSystemWrapper : public DynamicalSystemWrapper<Wrapee>
                 "Integrator must satisfy IntegratorConcept");
 
  public:
-  typedef typename Wrapee::precission_t precission_t;
+  typedef typename Wrapee::precision_t precision_t;
   typedef typename Wrapee::variable variable;
   typedef typename Wrapee::parameter parameter;
   typedef typename Wrapee::ConstructorArgs ConstructorArgs;
@@ -68,7 +68,7 @@ class DifferentialDynamicalSystemWrapper : public DynamicalSystemWrapper<Wrapee>
   DifferentialDynamicalSystemWrapper(ConstructorArgs &args)
       : DynamicalSystemWrapper<Wrapee>(args) {}
 
-  void step(precission_t h) {
+  void step(precision_t h) {
     Integrator::step(*this, h, Wrapee::m_variables, Wrapee::m_parameters);
   }
 };

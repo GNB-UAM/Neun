@@ -131,11 +131,11 @@ static_assert(IntegratableSystemConcept<SystemArchetype<double>>,
 //==============================================================================
 
 // Test 7.1: Precision types are correctly defined
-static_assert(std::is_same_v<ModelArchetype<double>::precission_t, double>,
-    "ModelArchetype<double>::precission_t must be double");
+static_assert(std::is_same_v<ModelArchetype<double>::precision_t, double>,
+    "ModelArchetype<double>::precision_t must be double");
 
-static_assert(std::is_same_v<SystemArchetype<float>::precission_t, float>,
-    "SystemArchetype<float>::precission_t must be float");
+static_assert(std::is_same_v<SystemArchetype<float>::precision_t, float>,
+    "SystemArchetype<float>::precision_t must be float");
 
 // Test 7.2: Variable and parameter counts are accessible
 static_assert(ModelArchetype<double>::n_variables > 0,

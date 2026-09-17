@@ -39,7 +39,7 @@ $Id: DifferentialDynamicalSystemArchetype.h,v 1.1.2.2 2006/11/28 17:10:04 elferd
 #include "DifferentialDynamicalSystemWrapper.h"
 #include "IntegratorArchetype.h"
 
-template <typename Precission>
-using DifferentialDynamicalSystemArchetype = DifferentialDynamicalSystemWrapper<DynamicalSystemArchetype<Precission>, IntegratorArchetype>;
+template <typename Precision>
+using DifferentialDynamicalSystemArchetype = DifferentialDynamicalSystemWrapper<DynamicalSystemArchetype<Precision>, IntegratorArchetype>;
 
 #endif /*DIFFERENTIALDYNAMICALSYSTEMARCHETYPE_H_*/

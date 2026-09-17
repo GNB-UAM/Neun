@@ -42,10 +42,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @brief Implements a synapse based on (Destexhe et al. 1994)
  */
-template <typename precission = double>
+template <typename precision = double>
 class GradualActivationSynapseModel {
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
  public:
@@ -60,15 +60,15 @@ class GradualActivationSynapseModel {
     n_parameters
   };
 
-  typedef precission precission_t;
+  typedef precision precision_t;
 
  public:
   GradualActivationSynapseModel() {}
 
-  void eval(const precission* const vars, const precission* const params,
-            precission* const incs) const {
+  void eval(const precision* const vars, const precision* const params,
+            precision* const incs) const {
     
-      precission r_inf = 1 / (1 + exp( (params[v_r] - params[v_pre]) / params[dec_slope]));
+      precision r_inf = 1 / (1 + exp( (params[v_r] - params[v_pre]) / params[dec_slope]));
       incs[r] = (r_inf - vars[r]) / params[tau_syn];
       incs[s] = (vars[r] - vars[s]) / params[tau_syn];
   }

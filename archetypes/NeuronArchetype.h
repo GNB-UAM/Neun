@@ -38,7 +38,7 @@ $Id: DynamicalSystemArchetype.h,v 1.1.2.2 2006/11/28 17:10:04 elferdo Exp $
 #include "NeuronBase.h"
 #include "SystemWrapper.h"
 
-template <typename Precission>
-using NeuronArchetype = SystemWrapper<NeuronBase<Precission>>;
+template <typename Precision>
+using NeuronArchetype = SystemWrapper<NeuronBase<Precision>>;
 
 #endif /*NEURONARCHETYPE_H_*/

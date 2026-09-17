@@ -43,10 +43,10 @@ $Id: IntegratedSystemConcept.h 184 2007-06-04 11:26:12Z elferdo $
  * A model of this concept must meet the requirements for SystemConcept plus:
  * 
  * The following methods
- * \li void step(precission_t step)
+ * \li void step(precision_t step)
  */
 template <typename IntegratedSystem>
-concept IntegratedSystemConcept = SystemConcept<IntegratedSystem> && requires(IntegratedSystem system, typename IntegratedSystem::precission_t step) {
+concept IntegratedSystemConcept = SystemConcept<IntegratedSystem> && requires(IntegratedSystem system, typename IntegratedSystem::precision_t step) {
     { system.step(step) };
 };
 

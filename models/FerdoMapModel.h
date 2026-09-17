@@ -46,12 +46,12 @@ $Id: FerdoMapModel.h 184 2007-06-04 11:26:12Z elferdo $
  * betae = 1
  * sigmae = 1
  */
-template <typename Precission>
+template <typename Precision>
 class FerdoMapModel {
-  static_assert(std::is_floating_point<Precission>::value);
+  static_assert(std::is_floating_point<Precision>::value);
 
  public:
-  typedef Precission precission_t;
+  typedef Precision precision_t;
 
   enum variable { x, y, z, n_variables };
   enum parameter {
@@ -66,11 +66,11 @@ class FerdoMapModel {
   };
 
  protected:
-  Precission m_variables[n_variables];
-  Precission m_parameters[n_parameters];
-  Precission m_synaptic_input;
+  Precision m_variables[n_variables];
+  Precision m_parameters[n_parameters];
+  Precision m_synaptic_input;
 
-  Precission f(Precission x, Precission y) const {
+  Precision f(Precision x, Precision y) const {
     if (x <= 0) {
       return m_parameters[alpha] / (1 - x) + y;
     } else if (x < m_parameters[alpha] + y) {
@@ -80,7 +80,7 @@ class FerdoMapModel {
     }
   }
 
-  Precission g(Precission x) const {
+  Precision g(Precision x) const {
     if (x <= -1.1) {
       return 1;
     } else {
@@ -90,7 +90,7 @@ class FerdoMapModel {
 
  public:
 
-  void step(Precission h) {
+  void step(Precision h) {
     m_variables[x] = f(m_variables[x],
                        m_variables[y] + m_parameters[betae] * m_synaptic_input);
     m_variables[y] =

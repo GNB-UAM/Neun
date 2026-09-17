@@ -50,43 +50,43 @@ $Id: HodgkinHuxleyModel.h 184 2007-06-04 11:26:12Z elferdo $
  * gl = 0.3 * 7.854e-3
  */
 
-template <typename Precission>
-class HodgkinHuxleyModel : public NeuronBase<Precission>
+template <typename Precision>
+class HodgkinHuxleyModel : public NeuronBase<Precision>
 {
 public:
-	typedef Precission precission_t;
+	typedef Precision precision_t;
 
 	enum variable {v, h, m, n, n_variables};
 	enum parameter {cm, vna, vk, vl, gna, gk, gl, n_parameters};
 
 protected:
 
-	Precission alpha_h(Precission v) const
+	Precision alpha_h(Precision v) const
 	{
 		return 0.07 * exp((-v - 65) / 20);
 	}
 
-	Precission beta_h(Precission v) const
+	Precision beta_h(Precision v) const
 	{
 		return 1 / (exp((-v - 35) / 10) + 1);
 	}
 
-	Precission alpha_m(Precission v) const
+	Precision alpha_m(Precision v) const
 	{
 		return (0.1 * (-v - 40))/(exp((-v - 40) / 10) - 1);
 	}
 
-	Precission beta_m(Precission v) const
+	Precision beta_m(Precision v) const
 	{
 		return 4 * exp((-v - 65) / 18);
 	}
 
-	Precission alpha_n(Precission v) const
+	Precision alpha_n(Precision v) const
 	{
 		return (0.01 * (-v - 55)) / (exp((-v - 55) / 10) - 1);
 	}
 
-	Precission beta_n(Precission v) const
+	Precision beta_n(Precision v) const
 	{
 		return 0.125 * exp((-v - 65) / 80);
 	}
@@ -95,9 +95,9 @@ public:
 
 	//HodgkinHuxleyModel(){}
 
-	void eval(const Precission * const vars, 
-		Precission * const params, 
-		Precission * const incs) const
+	void eval(const Precision * const vars, 
+		Precision * const params, 
+		Precision * const incs) const
 	{
 		incs[m] = alpha_m(vars[v]) * (1 - vars[m]) - beta_m(vars[v]) * vars[m];
 		incs[h] = alpha_h(vars[v]) * (1 - vars[h]) - beta_h(vars[v]) * vars[h];
