@@ -37,10 +37,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
 * @brief Implements a synapse based on (Song, Miller & Abbott, 2000)
 */
-template <typename precission = double>
+template <typename precision = double>
 class STDPSynapseModel {
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
   public:
@@ -66,13 +66,13 @@ class STDPSynapseModel {
       n_parameters
     };
     
-    typedef precission precission_t;
+    typedef precision precision_t;
 
   public:
     STDPSynapseModel() {}
 
-    void eval(const precission* const vars, const precission* const params,
-              precission* const incs) const {
+    void eval(const precision* const vars, const precision* const params,
+              precision* const incs) const {
 
       incs[g] = 0; // d(g)/dt = 0
 

@@ -52,7 +52,7 @@ class SynapseWeightNormalizer {
 
  public:
 
-  using precission = typename Synapse::precission_t;
+  using precision = typename Synapse::precision_t;
   static SynapseWeightNormalizer& get_instance() {
     static SynapseWeightNormalizer instance;
     return instance;
@@ -98,28 +98,28 @@ class SynapseWeightNormalizer {
     std::vector<Synapse*>& synapse_group = map_iterator->second;
     if (synapse_group.empty()) return;
 
-    const precission w_max = updated_synapse->get_w_max();
-    const precission w_min = -w_max;
-    precission range = w_max - w_min;
+    const precision w_max = updated_synapse->get_w_max();
+    const precision w_min = -w_max;
+    precision range = w_max - w_min;
 
     // Subtract the mean to keep sum constant
-    precission sum = 0;
+    precision sum = 0;
     for (Synapse* s : synapse_group) {
         sum += s->get_weight();
     }
     
-    precission mean = sum / synapse_group.size();
+    precision mean = sum / synapse_group.size();
 
     if (std::abs(mean) > 1e-15) {
         for (Synapse* s : synapse_group) {
-            precission w = s->get_weight();
+            precision w = s->get_weight();
             s->set_weight(w - mean);
         }
     }
 
     // Values must stay in range [-w_max, w_max]
     for (Synapse* s : synapse_group) {
-        precission w = s->get_weight();
+        precision w = s->get_weight();
         if (w > w_max) s->set_weight(w_max);
         else if (w < -w_max) s->set_weight(-w_max);
     }

@@ -53,23 +53,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Implements a synapse based on (Song, Miller & Abbott, 2000)
 */
 
-template <typename TNode1, typename TNode2, typename TIntegrator, typename precission = double>
+template <typename TNode1, typename TNode2, typename TIntegrator, typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
     IntegratorConcept<TIntegrator, SerializableWrapper<
-          SystemWrapper<STDPSynapseModel<precission> > > >
+          SystemWrapper<STDPSynapseModel<precision> > > >
 
 class STDPSynapse : public SerializableWrapper<
-          SystemWrapper<STDPSynapseModel<precission> > > {
+          SystemWrapper<STDPSynapseModel<precision> > > {
  private:
   #ifndef __AVR_ARCH__
-    static_assert(std::is_floating_point<precission>::value);
+    static_assert(std::is_floating_point<precision>::value);
   #endif  //__AVR_ARCH__
 
-  precission m_vpre_old;
-  precission m_vpost_old;
-  precission m_current_time;
-  precission m_last_spike_pre;
-  precission m_last_spike_post;
+  precision m_vpre_old;
+  precision m_vpost_old;
+  precision m_current_time;
+  precision m_last_spike_pre;
+  precision m_last_spike_post;
   TNode1 const &m_n1;
   TNode2 &m_n2;
 
@@ -79,12 +79,12 @@ class STDPSynapse : public SerializableWrapper<
 
 
   typedef SerializableWrapper<
-      SystemWrapper<STDPSynapseModel<precission> > > System;
+      SystemWrapper<STDPSynapseModel<precision> > > System;
 
   const int m_steps;
 
  public:
-  typedef typename System::precission_t precission_t;
+  typedef typename System::precision_t precision_t;
   typedef typename System::variable variable;
   typedef typename System::parameter parameter;
   typedef typename System::ConstructorArgs ConstructorArgs;
@@ -127,18 +127,18 @@ class STDPSynapse : public SerializableWrapper<
         }
  private:
   void calculate_i() {
-    precission E_syn = System::m_parameters[System::E_syn];
+    precision E_syn = System::m_parameters[System::E_syn];
 
   // Isyn = gsyn * s * (V - Esyn)
 
   System::m_parameters[System::i] = CURRENT_DIRECTION * System::m_variables[System::g] * System::m_variables[System::s] * (System::m_parameters[System::v_post] - E_syn);
   }
 
-  void update_g(precission h) {
+  void update_g(precision h) {
     
     // Update internal simulation clock
     m_current_time += h;
-    precission threshold = System::m_parameters[System::spike_threshold];
+    precision threshold = System::m_parameters[System::spike_threshold];
 
     // Detect spikes // ----------------------------------------------------------------------------------
      
@@ -148,11 +148,11 @@ class STDPSynapse : public SerializableWrapper<
       System::m_variables[System::s] = 1.0; // Update s if vpre spikes
       
       // △t = t_pre - t_post
-      precission delta_t = m_last_spike_pre - m_last_spike_post; 
+      precision delta_t = m_last_spike_pre - m_last_spike_post; 
 
       // LTD {F(△t) = (-A- * exp(-△t/ τ-)) if △t > 0}
       if (delta_t > 0) {
-        precission f_delta_t = (-System::m_parameters[System::A_minus] * std::exp(-delta_t / System::m_parameters[System::tau_minus]));
+        precision f_delta_t = (-System::m_parameters[System::A_minus] * std::exp(-delta_t / System::m_parameters[System::tau_minus]));
         System::m_variables[System::g] += f_delta_t; // g := g + F(△t)
       }
     }
@@ -162,11 +162,11 @@ class STDPSynapse : public SerializableWrapper<
       m_last_spike_post = m_current_time;
       
       // △t = t_pre - t_post
-      precission delta_t = m_last_spike_pre - m_last_spike_post; 
+      precision delta_t = m_last_spike_pre - m_last_spike_post; 
 
       // LTP {F(△t) = (A+ * exp(△t/ τ+)) if △t < 0}
       if (delta_t < 0) {
-        precission f_delta_t = (System::m_parameters[System::A_plus] * std::exp(delta_t / System::m_parameters[System::tau_plus]));
+        precision f_delta_t = (System::m_parameters[System::A_plus] * std::exp(delta_t / System::m_parameters[System::tau_plus]));
         System::m_variables[System::g] += f_delta_t; // g := g + F(△t)
       }
     }
@@ -188,11 +188,11 @@ class STDPSynapse : public SerializableWrapper<
   }
 
  public:
-  void step(precission h) {
+  void step(precision h) {
     
-    precission v_pre = m_n1.get(m_n1_variable);
+    precision v_pre = m_n1.get(m_n1_variable);
     System::m_parameters[System::v_pre] = v_pre;
-    precission v_post = m_n2.get(m_n2_variable);
+    precision v_post = m_n2.get(m_n2_variable);
     System::m_parameters[System::v_post] = v_post;
 
     for (int i = 0; i < m_steps; ++i) {
@@ -206,7 +206,7 @@ class STDPSynapse : public SerializableWrapper<
 
   }
 
-  void step(precission h, precission vpre, precission vpost) {
+  void step(precision h, precision vpre, precision vpost) {
     
     System::m_parameters[System::v_pre] = vpre;
     System::m_parameters[System::v_post] = vpost;
@@ -221,7 +221,7 @@ class STDPSynapse : public SerializableWrapper<
     calculate_i();
   }
 
-  void set_g(precission g) {
+  void set_g(precision g) {
     System::m_variables[System::g] = g;
   }
 

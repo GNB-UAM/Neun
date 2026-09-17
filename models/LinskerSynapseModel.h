@@ -39,10 +39,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @brief Implements a synapsis based on (Linsker 1986)
  */
-template <typename precission = double>
+template <typename precision = double>
 class LinskerSynapseModel {
 #ifndef __AVR_ARCH__
-  static_assert(std::is_floating_point<precission>::value);
+  static_assert(std::is_floating_point<precision>::value);
 #endif  //__AVR_ARCH__
 
  public:
@@ -63,13 +63,13 @@ class LinskerSynapseModel {
       n_parameters
     };
 
-    typedef precission precission_t;
+    typedef precision precision_t;
 
  public:
     LinskerSynapseModel() {}
 
-    void eval(const precission* const vars, const precission* const params,
-              precission* const incs) const {
+    void eval(const precision* const vars, const precision* const params,
+              precision* const incs) const {
         incs[w] = params[eta] * ((params[v_pre] - params[xo]) * (params[v_post] - params[yo]) + params[k1]);
     }
 };

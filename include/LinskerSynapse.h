@@ -56,42 +56,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 * Implements a synapse based on (Linsker, 1986)
 */
 
-template <typename TNode1, typename TNode2, typename TIntegrator, typename precission = double>
+template <typename TNode1, typename TNode2, typename TIntegrator, typename precision = double>
 requires NeuronConcept<TNode1> && NeuronConcept<TNode2> &&
     IntegratorConcept<TIntegrator, SerializableWrapper<
-          SystemWrapper<LinskerSynapseModel<precission> > > >
+          SystemWrapper<LinskerSynapseModel<precision> > > >
 
 class LinskerSynapse
       : public SerializableWrapper<
-            SystemWrapper<LinskerSynapseModel<precission> > > {
+            SystemWrapper<LinskerSynapseModel<precision> > > {
  private:
   #ifndef __AVR_ARCH__
-    static_assert(std::is_floating_point<precission>::value);
+    static_assert(std::is_floating_point<precision>::value);
   #endif  //__AVR_ARCH__
 
-  precission m_release_time;
+  precision m_release_time;
 
   TNode1 const &m_n1;
   TNode2 &m_n2;
 
-  precission m_last_value_pre;
+  precision m_last_value_pre;
 
   const typename TNode1::variable m_n1_variable;
   const typename TNode2::variable m_n2_variable;
 
 
   typedef SerializableWrapper<
-      SystemWrapper<LinskerSynapseModel<precission> > > System;
+      SystemWrapper<LinskerSynapseModel<precision> > > System;
 
   const int m_steps;
 
 
  public:
-  typedef typename System::precission_t precission_t;
+  typedef typename System::precision_t precision_t;
   typedef typename System::variable variable;
   typedef typename System::parameter parameter;
   typedef typename System::ConstructorArgs ConstructorArgs;
-  using Normalizer = SynapseWeightNormalizer<TNode2, LinskerSynapse<TNode1, TNode2, TIntegrator, precission>>;
+  using Normalizer = SynapseWeightNormalizer<TNode2, LinskerSynapse<TNode1, TNode2, TIntegrator, precision>>;
 
   LinskerSynapse (TNode1 const &n1, typename TNode1::variable v1,
                                               TNode2 &n2, typename TNode2::variable v2, 
@@ -143,7 +143,7 @@ class LinskerSynapse
   void calculate_i() {
     System::m_parameters[System::i] = CURRENT_DIRECTION * System::m_variables[System::w] * System::m_parameters[System::v_post];
   }
-  void update_w(precission h) {
+  void update_w(precision h) {
     for (int i = 0; i < m_steps; ++i) {
       TIntegrator::step(*this, h, System::m_variables, System::m_parameters);
     }
@@ -151,20 +151,20 @@ class LinskerSynapse
   }
  public:
 
-  void step(precission h) {
+  void step(precision h) {
 
     System::m_parameters[System::v_pre] = m_n1.get(m_n1_variable);
-    precission v_post = m_n2.get(m_n2_variable);
+    precision v_post = m_n2.get(m_n2_variable);
     System::m_parameters[System::v_post] = v_post;
     
     update_w(h);
     calculate_i();
   }
 
-  void step(precission h, precission vpre, precission vpost) {
+  void step(precision h, precision vpre, precision vpost) {
 
     System::m_parameters[System::v_pre] = vpre;
-    precission v_post = vpost;
+    precision v_post = vpost;
     System::m_parameters[System::v_post] = v_post;
     
     update_w(h);
@@ -172,21 +172,21 @@ class LinskerSynapse
   }
 
 
-  precission get_w_max() const {
+  precision get_w_max() const {
     return System::m_parameters[System::w_max];
   }
   
-  precission get_weight() const {
+  precision get_weight() const {
     return System::m_variables[System::w];
   }
 
-  void set_weight(precission weight) {
+  void set_weight(precision weight) {
     System::m_variables[System::w] = weight;
   }  
   
  private:
 
- static_assert(NormalizableSynapseConcept<LinskerSynapse<TNode1, TNode2, TIntegrator, precission>>);
+ static_assert(NormalizableSynapseConcept<LinskerSynapse<TNode1, TNode2, TIntegrator, precision>>);
 };
 
 
