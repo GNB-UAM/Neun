@@ -115,10 +115,6 @@ class VavoulisModel : public NeuronBase<Precision> {
   }
 
  public:
-  VavoulisModel(ConstructorArgs const &args) {
-    std::copy(args.params, args.params + n_parameters, m_parameters);
-    std::copy(args.variables, args.variables + n_variables, m_variables);
-  }
 
   void eval(const Precision *const vars, Precision *const params,
             Precision *const incs) const {

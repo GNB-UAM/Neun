@@ -173,11 +173,6 @@ protected:
 
 public:
 
-  VavoulisCGCModelQ10(ConstructorArgs const &args)
-  {
-    std::copy(args.params, args.params + n_parameters, m_parameters);
-  }
-
 	void eval(const Precision * const vars, Precision * const params, Precision * const incs) const
 	{
 		incs[h]= params[t_scale] * incr_x(phi_q10(params[Q10_h], params[diff_T]),
