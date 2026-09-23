@@ -57,14 +57,14 @@ class RowatSelverstonModel {
   enum parameter { tm, sf, ts, ss, af, es, n_parameters };
 
  public:
-  void eval(const Precision *const vars, Precision *const incs) const {
+  void eval(const Precision *const vars, Precision *const params, Precision *const incs) const {
     incs[v] = -(vars[v] -
-                m_parameters[af] *
-                    tanh((m_parameters[sf] / m_parameters[af]) * vars[v]) +
+                params[af] *
+                    tanh((params[sf] / params[af]) * vars[v]) +
                 vars[q] - SYNAPTIC_INPUT) /
-              m_parameters[tm];
-    incs[q] = (-vars[q] + m_parameters[ss] * (vars[v] - m_parameters[es])) /
-              m_parameters[ts];
+              params[tm];
+    incs[q] = (-vars[q] + params[ss] * (vars[v] - params[es])) /
+              params[ts];
   }
 };
 

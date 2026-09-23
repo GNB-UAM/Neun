@@ -52,10 +52,10 @@ class SimpleOscillatorModel {
 
  public:
 
-  void eval(const Precision *const vars, Precision *const incs) const {
-    incs[x] = m_parameters[A] * pow(vars[x] - m_parameters[a], 2) * vars[x] -
+  void eval(const Precision *const vars, Precision *const params, Precision *const incs) const {
+    incs[x] = params[A] * pow(vars[x] - params[a], 2) * vars[x] -
               vars[y] + SYNAPTIC_INPUT;
-    incs[y] = m_parameters[m] * (vars[x] - m_parameters[x0]);
+    incs[y] = params[m] * (vars[x] - params[x0]);
   }
 };
 
