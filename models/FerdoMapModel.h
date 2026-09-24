@@ -46,8 +46,9 @@ $Id: FerdoMapModel.h 184 2007-06-04 11:26:12Z elferdo $
  * betae = 1
  * sigmae = 1
  */
+#include "NeuronBase.h"
 template <typename Precision>
-class FerdoMapModel {
+class FerdoMapModel : public NeuronBase<Precision> {
   static_assert(std::is_floating_point<Precision>::value);
 
  public:

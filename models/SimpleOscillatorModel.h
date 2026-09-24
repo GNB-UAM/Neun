@@ -38,10 +38,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cmath>
 #include <type_traits>
 
+#include "NeuronBase.h"
 /**
  */
 template <typename Precision>
-class SimpleOscillatorModel {
+class SimpleOscillatorModel : public NeuronBase<Precision> {
   static_assert(std::is_floating_point<Precision>::value);
 
  public:

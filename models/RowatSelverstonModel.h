@@ -38,6 +38,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cmath>
 #include <type_traits>
 
+#include "NeuronBase.h"
+
 /** (Rowat and Selverston, 1997)
  * tm = 1
  * sf = 2
@@ -47,7 +49,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * es = 1
  */
 template <typename Precision>
-class RowatSelverstonModel {
+class RowatSelverstonModel : public NeuronBase<Precision> {
   static_assert(std::is_floating_point<Precision>::value);
 
  public:
